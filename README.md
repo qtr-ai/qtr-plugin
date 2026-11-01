@@ -48,7 +48,7 @@ Nothing runs on your machine: no hooks and no local servers.
 
 ## Your data
 
-- Claude reaches QTR only through the connector, over HTTPS. The sign-in lets Claude act as you in QTR and nowhere else, and you can choose read-only access.
+- Claude reaches QTR only through the connector, over HTTPS. The sign-in lets Claude act as you in QTR and nowhere else.
 - Your data stays in QTR, as its [privacy policy](https://qtr.ai/privacy) describes.
 - Tool calls run as soon as Claude makes them. Claude asks before anything that deletes, changes many things at once or reaches other people, and the tools that change or remove data are marked so Claude asks before each one.
 - To disconnect, remove the connector.
