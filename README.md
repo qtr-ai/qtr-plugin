@@ -4,7 +4,7 @@
 
 **Plan your quarter, your week and today in [QTR](https://qtr.ai), from Claude.**
 
-[Install](#install)&nbsp;&nbsp;&nbsp;&nbsp;[What you can ask](#what-you-can-ask)&nbsp;&nbsp;&nbsp;&nbsp;[Your data](#your-data)&nbsp;&nbsp;&nbsp;&nbsp;[Changelog](CHANGELOG.md)
+[Install](#install)&nbsp;&nbsp;&nbsp;&nbsp;[What you can do](#nearly-everything-you-do-in-qtr-now-through-your-agents)&nbsp;&nbsp;&nbsp;&nbsp;[Your data](#your-data)&nbsp;&nbsp;&nbsp;&nbsp;[Changelog](CHANGELOG.md)
 
 </div>
 
@@ -33,16 +33,11 @@ npx skills add qtr-ai/qtr-plugin
 
 Then add `https://prodapi.qtr.ai/mcp/sse` as an MCP server and sign in.
 
-## What you can ask
+## Nearly everything you do in QTR, now through your agents
 
-| You say | Claude |
-|---|---|
-| "Brief me on today." | Your top three, your meetings and anything at risk |
-| "Move everything overdue to this week." | Moves them all, once you say yes |
-| "Map out my launch goal." | Checkpoints and tasks on the goal's map |
-| "Time-block my day." | Shows the blocks first, then places them |
-| "What's waiting for my approval?" | Ansel's proposals, one at a time |
-| "I ran today." | Checks in on your habit challenge |
+Tasks, goals, notes, focus, calendars, sharing and Ansel, asked for in your own words.
+
+![Six QTR cards on the desk, each with something you can ask: Today, "Brief me on today." This week, "Move everything overdue to this week." Q4 goals, "Map out my launch goal." Notebook, "Turn my meeting notes into tasks." Focus, "Time-block my afternoon, then start a focus." Ansel, "What's waiting for my approval?"](assets/asks.jpg)
 
 ## What's inside
 
