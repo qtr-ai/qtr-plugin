@@ -10,10 +10,10 @@ description: >-
   tasks, goals, plans, habits, focus or schedule while QTR tools are available, even if they don't say
   "QTR". Also use it to set up the QTR connector in Claude, ChatGPT or Claude Code.
 compatibility: >-
-  Needs the QTR MCP connector (https://prodapi.qtr.ai/mcp/sse) and a QTR account, Free or Pro. A few REST
+  Needs the QTR MCP connector (https://api.qtr.ai/mcp/sse) and a QTR account, Free or Pro. A few REST
   routes work with the same sign-in.
 metadata:
-  version: "1.1.0"
+  version: "1.1.1"
 ---
 
 # QTR
@@ -24,7 +24,7 @@ If the QTR tools aren't available, help the user connect first. The steps are in
 
 ## Keeping this skill current
 
-This is version 1.1.0 of the QTR skill. The first time you use the QTR connector in a conversation, call `get_skill_version` with `version: "1.1.0"`.
+This is version 1.1.1 of the QTR skill. The first time you use the QTR connector in a conversation, call `get_skill_version` with `version: "1.1.1"`.
 
 If `upToDate` is `false`, tell the user once, before your answer: "We've made changes to the QTR skill. Please update it." Add what changed, from `changes`, and the line from `howToUpdate` for the app you're in: `claudeApps` on claude.ai, Claude Desktop or Cowork, `claudeCode` in Claude Code, `otherAgents` anywhere else. Then carry on with the request, and don't bring it up again in that conversation. Any other answer, or no answer, needs no mention.
 
@@ -37,7 +37,7 @@ These ideas shape almost every call, so keep them in mind:
 - **Goals have maps.** A goal has checkpoints (milestones to reach) with tasks under them. Its status (on track, at risk, off track, achieved) is judged from its own tasks.
 - **The desk.** In the app, the user works on a desk of cards: Today, Week, Quarter, Inbox, lists, goals, Calendar, Focus. Results often mention cards because that's where they show.
 - **Ansel's changes.** Inside QTR, risky changes wait as proposals the user approves. Routines and background agents leave theirs waiting too. You can list, approve, reject, undo and redo them.
-- **Workspaces.** Everyone has a personal workspace and may be in team workspaces. Tools act in the user's current workspace.
+- **Workspaces.** Everyone has a personal workspace and may be in team workspaces. Tools work in the personal one. To read, add or plan in a team workspace, pass its name as `workspace` on that call. Switching workspace in the QTR app doesn't change this.
 
 ## Views in the chat
 

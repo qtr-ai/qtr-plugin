@@ -32,7 +32,7 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `get_tasks` | R | `when`, `in`, `member`, `period`, `assignedBy`, `quadrant` | Get the user's tasks. |
+| `get_tasks` | R | `when`, `in`, `member`, `period`, `assignedBy`, `quadrant`, `workspace` | Get the user's tasks. |
 | `get_task_comments` | R | `id`* | What people have said on a task: its newest 50 comments, oldest first, as { authorName, createdAt, text }. |
 | `get_task_links` | R | `id`* | Where a task is linked in a connected app (Asana, Todoist, ClickUp): the app, the link to open the task there, and its sync state. |
 | `get_app_comments` | R | `taskId`* | The comments on a task that came from a connected app (Asana, ClickUp or Todoist), oldest first, with who wrote each and when. |
@@ -42,17 +42,17 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `create_task` | W | `title`*, `description`, `periodType`, `periodDate`, `period`, `dueDate`, `endDateTime`, `duration`, `priority`, `isUrgent`, `isTopPriority`, `listId`, `projectId`, `goalId`, `parentTaskId`, `recurrenceRule`, `recurrenceStartDate`, `recurrenceEndDate`, `recurrenceTimezone`, `forceSchedule`, `calendarId`, `assignee` | Create a new task. |
-| `create_tasks` | W | `tasks`* | Create several tasks in one call, from 1 to 50, each set up as create_task would. |
-| `create_recurring_task` | W | `title`, `frequency`, `daysOfWeek`, `interval`, `startDate`, `endDate`, `time`, `goalId`, `listId`, `projectId`, `timezone` | Create a recurring task interactively. |
+| `create_task` | W | `title`*, `description`, `periodType`, `periodDate`, `period`, `dueDate`, `endDateTime`, `duration`, `priority`, `isUrgent`, `isTopPriority`, `listId`, `projectId`, `goalId`, `parentTaskId`, `recurrenceRule`, `recurrenceStartDate`, `recurrenceEndDate`, `recurrenceTimezone`, `forceSchedule`, `calendarId`, `assignee`, `workspace` | Create a new task. |
+| `create_tasks` | W | `tasks`*, `workspace` | Create several tasks in one call, from 1 to 50, each set up as create_task would. |
+| `create_recurring_task` | W | `title`, `frequency`, `daysOfWeek`, `interval`, `startDate`, `endDate`, `time`, `goalId`, `listId`, `projectId`, `timezone`, `workspace` | Create a recurring task interactively. |
 | `update_task` | D | `id`*, `title`, `description`, `dueDate`, `endDateTime`, `duration`, `priority`, `isUrgent`, `isTopPriority`, `isHighlighted`, `status`, `periodType`, `periodDate`, `period`, `listId`, `projectId`, `assignee`, `removeFromList`, `removeFromProject`, `removeFromGoal`, `removeRecurrence`, `recurrenceRule`, `recurrenceEndDate`, `recurrenceTimezone`, `updateAllOccurrences`, `forceSchedule` | Update a task's properties. |
 | `complete_task` | D | `id`* | Mark a task as complete (done) |
 | `delete_task` | D | `id`*, `scope` | Delete a task. |
-| `restore_task` | D | `id`, `title` | Bring back a task the user deleted ("bring it back", "undo the delete", "restore the task I deleted"). |
+| `restore_task` | D | `id`, `title`, `workspace` | Bring back a task the user deleted ("bring it back", "undo the delete", "restore the task I deleted"). |
 | `duplicate_task` | W | `id`* | Create a copy of an existing task with all its properties |
 | `bulk_update_tasks` | D | `ids`*, `changes`* | Change several tasks at once, as the selection dock on the desk does: mark them done, move them to a day, week, month, quarter, year or the inbox, set or clear important, urgent and top priority,… |
-| `reschedule_overdue` | D | `to` | Move every overdue task at once and clear their times. |
-| `reorder_tasks` | D | `ids`*, `position`*, `anchorId` | Change the order tasks appear in their lists, e.g. |
+| `reschedule_overdue` | D | `to`, `workspace` | Move every overdue task at once and clear their times. |
+| `reorder_tasks` | D | `ids`*, `position`*, `anchorId`, `workspace` | Change the order tasks appear in their lists, e.g. |
 | `assign_task_to_list` | D | `taskTitle`, `taskId`, `listName`, `listId`, `createListIfNotFound`, `showInboxTasks` | Assign a task to a list — fully interactive. |
 | `add_task_comment` | D | `id`*, `text`* | Comment on a task shared with other people, as the user: "tell them the venue is booked". |
 
@@ -62,29 +62,29 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 |---|---|---|---|
 | `search` | R | `query`* | Semantic search across the user's tasks, goals, notes, journals and notebook (notebook hits have type Notebook). |
 | `fetch` | R | `id`* | Read one item in full by its id from search: a task, goal, journal, note or notebook note, with its whole text and a link to open QTR. |
-| `ask_brain` | R | `question`* | Answer a question about the user's own content by retrieving the most relevant tasks/goals/notes/journals/notebook notes as citeable sources. |
+| `ask_brain` | R | `question`*, `workspace` | Answer a question about the user's own content by retrieving the most relevant tasks/goals/notes/journals/notebook notes as citeable sources. |
 | `find_tag` | R | `tag`* | Everything tagged with one #tag, grouped by where it lives: notebook notes and jots, tasks, goals and period notes. |
-| `prioritize` | R | none | Recommend what the user should focus on now/next, reasoning over today's tasks, overdue items, goals, and working hours. |
-| `summarize` | R | `scope`, `query` | Produce a concise narrative summary of the user's work, or the data to write one from. |
+| `prioritize` | R | `workspace` | Recommend what the user should focus on now/next, reasoning over today's tasks, overdue items, goals, and working hours. |
+| `summarize` | R | `scope`, `query`, `workspace` | Produce a concise narrative summary of the user's work, or the data to write one from. |
 | `suggest_time_for_task` | R | `durationMinutes`*, `date`, `maxSlots` | Find the best available time slots for a task of a given duration. |
 
 ## Goals and checkpoints
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `get_goals` | R | none | Get the user's active goals |
+| `get_goals` | R | `workspace` | Get the user's active goals |
 | `get_goal_map` | R | `goalId`* | One goal's map: its checkpoints in order, the tasks under each and whether they are done, the goal's tasks under no checkpoint, and its progress. |
 | `get_goal_progress` | R | `goalId`* | How one goal is going: tasks done and left, percent complete, its hill (height 0 to 1 and whether its score is climbing, flat or sliding) and its score this week. |
-| `create_goal_plan` | W | `title`*, `description`, `color`, `quarter`, `year`, `nodes`* | Create a quarterly goal with a visual roadmap. |
-| `map_goal` | D | `goalId`*, `answers`, `asked` | Have QTR map out a goal the user already has, in one go: checkpoints, the tasks for each, and steps for the tasks that need them, all added to its map. |
+| `create_goal_plan` | W | `title`*, `description`, `color`, `quarter`, `year`, `nodes`*, `workspace` | Create a quarterly goal with a visual roadmap. |
+| `map_goal` | D | `goalId`*, `answers`, `asked`, `workspace` | Have QTR map out a goal the user already has, in one go: checkpoints, the tasks for each, and steps for the tasks that need them, all added to its map. |
 | `add_checkpoints` | W | `goalId`*, `checkpoints`* | Add checkpoints to the map of a goal the user already has, each optionally with its first tasks. |
 | `update_goal` | D | `id`*, `title`, `description`, `color`, `isCompleted`, `achieveBy`, `begin` | Update a goal — title, description, color, completion, or its begin/achieve-by timeframe |
 | `delete_goal` | D | `name`, `id`, `deleteTasks` | Delete a goal — fully interactive. |
-| `reorder_goals` | D | `ids`*, `position`*, `anchorId` | Change the order of the user's goals, e.g. |
+| `reorder_goals` | D | `ids`*, `position`*, `anchorId`, `workspace` | Change the order of the user's goals, e.g. |
 | `move_goal_to_next_quarter` | D | `goalId`* | Push a goal into the next quarter, the same as the desk's "Move to next quarter": its achieve-by date and its begin date (if set) move forward one quarter, and the goal's tasks planned for the… |
 | `link_task_to_goal` | D | `taskId`*, `goalId`*, `forceReplace` | Link a task to a goal. |
 | `link_sub_goal` | D | `childGoalId`*, `parentGoalId`*, `forceReparent` | Make a goal a sub-goal of another goal. |
-| `schedule_goal` | D | `goalId`, `goalTitle`, `mode`, `schedules` | Schedule all tasks in a goal onto the calendar. |
+| `schedule_goal` | D | `goalId`, `goalTitle`, `mode`, `schedules`, `workspace` | Schedule all tasks in a goal onto the calendar. |
 | `add_tasks_to_checkpoint` | D | `goalId`*, `checkpoint`*, `tasks`*, `periodType`, `periodDate` | Add tasks under a checkpoint on a goal's map. |
 | `update_checkpoint` | D | `goalId`*, `checkpoint`*, `title`, `completed` | Rename one of a goal's checkpoints, or mark it done or not done. |
 | `reorder_checkpoints` | D | `goalId`*, `checkpoints`* | Change the order of a goal's checkpoints, the order the goal card lists them in. |
@@ -95,16 +95,16 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `get_day_brief` | R | `part` | The user's day in one read, built from their own data in their time zone. |
-| `get_week_review` | R | none | The weekly review in one read: what got done and what slipped in the week under review, the goals that need a look (off track or at risk, with reasons), where the quarter stands, and the week to… |
-| `get_goal_status` | R | `goalId`* | How one goal is going, judged from its own tasks: status (on_track, at_risk, off_track or achieved), the reasons and the evidence behind it (tasks done against planned, checkpoints, this week, the… |
-| `get_quarter_status` | R | none | How the quarter is going across the user's goals: the week of the quarter, days left, a count by status, and each goal with its status, reasons, evidence and next week's focus, the ones that need… |
-| `get_at_risk` | R | none | What is at risk right now, each with a concrete fix: overdue work, an overloaded day or week, goals that are slipping or due with nothing planned, a task moved again and again, times that end… |
+| `get_day_brief` | R | `part`, `workspace` | The user's day in one read, built from their own data in their time zone. |
+| `get_week_review` | R | `workspace` | The weekly review in one read: what got done and what slipped in the week under review, the goals that need a look (off track or at risk, with reasons), where the quarter stands, and the week to… |
+| `get_goal_status` | R | `goalId`*, `workspace` | How one goal is going, judged from its own tasks: status (on_track, at_risk, off_track or achieved), the reasons and the evidence behind it (tasks done against planned, checkpoints, this week, the… |
+| `get_quarter_status` | R | `workspace` | How the quarter is going across the user's goals: the week of the quarter, days left, a count by status, and each goal with its status, reasons, evidence and next week's focus, the ones that need… |
+| `get_at_risk` | R | `workspace` | What is at risk right now, each with a concrete fix: overdue work, an overloaded day or week, goals that are slipping or due with nothing planned, a task moved again and again, times that end… |
 | `plan_time_blocks` | D | `scope`, `date`, `taskIds`, `minutes`, `replan`, `notBefore`, `overflow`, `confirm` | Time-block the user's day or week: places their untimed tasks into free time inside their working hours, around every meeting and timed task they already have, highest priority first. |
-| `get_week_plan` | R | `week` | Read the user's plan for a week: the write-up on the week's plan strip that the week ritual saves. |
-| `save_week_plan` | D | `week`, `plan`, `goalNames`, `taskTitles`, `ramble`, `replace` | Save the user's plan for a week onto the week's plan strip, the same place the week ritual saves it. |
-| `get_period_plan` | R | `period`*, `when` | Read the plan written for a week or a quarter: the text on that card's plan strip on the desk. |
-| `set_period_plan` | D | `period`*, `when`, `plan`*, `replace` | Write the plan for a week or a quarter, the text shown on that card's plan strip. |
+| `get_week_plan` | R | `week`, `workspace` | Read the user's plan for a week: the write-up on the week's plan strip that the week ritual saves. |
+| `save_week_plan` | D | `week`, `plan`, `goalNames`, `taskTitles`, `ramble`, `replace`, `workspace` | Save the user's plan for a week onto the week's plan strip, the same place the week ritual saves it. |
+| `get_period_plan` | R | `period`*, `when`, `workspace` | Read the plan written for a week or a quarter: the text on that card's plan strip on the desk. |
+| `set_period_plan` | D | `period`*, `when`, `plan`*, `replace`, `workspace` | Write the plan for a week or a quarter, the text shown on that card's plan strip. |
 
 ## Ansel: changes waiting for approval, undo and redo
 
@@ -122,16 +122,16 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 | Tool | | Parameters | What it does |
 |---|---|---|---|
 | `list_routines` | R | none | The user's Ansel routines: what each does, when it runs, whether it is on, its approval mode, and its last runs with their outcome. |
-| `create_routine` | D | `template`, `name`, `instruction`, `days`, `hour`, `minute`, `mode` | Set up a routine Ansel runs on a schedule, like "every Friday at 4, draft my weekly review" or "every weekday at 8, plan my day". |
+| `create_routine` | D | `template`, `name`, `instruction`, `days`, `hour`, `minute`, `mode`, `workspace` | Set up a routine Ansel runs on a schedule, like "every Friday at 4, draft my weekly review" or "every weekday at 8, plan my day". |
 | `update_routine` | D | `routine`*, `enabled`, `name`, `instruction`, `days`, `hour`, `minute`, `mode` | Change a routine: pause or resume it (enabled), its name, instruction, days, time or approval mode. |
 | `delete_routine` | D | `routine`* | Delete a routine. |
 | `list_nudges` | R | `status` | List the nudges (the reminders and suggestions QTR shows the user), most important and newest first, with the tasks each one is about and the choices it offers. |
 | `act_on_nudge` | D | `id`*, `choice` | Record the user's answer to a nudge: accept ("sure", "do it"), later (snoozes it for a few hours) or dismiss ("keep as is"). |
 | `dismiss_nudge` | D | `id`* | Dismiss a nudge the user does not want to see any more. |
 | `mark_nudge_seen` | D | `id`* | Mark a nudge as seen without answering it, for example after you have told the user what it says. |
-| `run_agent_now` | D | `agent`* | Run one of QTR's background agents now, in the workspace the user is in. |
-| `get_lanes` | R | none | Get how much QTR's background agents may do on their own in each area of the workspace the user is in (calendar, tasks, goals, integrations, notes): OFF, PROPOSE (ask first) or AUTO_SAFE (apply… |
-| `set_lane_mode` | D | `lane`*, `mode`* | Set how much QTR's background agents may do on their own in one area of the workspace the user is in. |
+| `run_agent_now` | D | `agent`*, `workspace` | Run one of QTR's background agents now, in the workspace the user is in. |
+| `get_lanes` | R | `workspace` | Get how much QTR's background agents may do on their own in each area of the workspace the user is in (calendar, tasks, goals, integrations, notes): OFF, PROPOSE (ask first) or AUTO_SAFE (apply… |
+| `set_lane_mode` | D | `lane`*, `mode`*, `workspace` | Set how much QTR's background agents may do on their own in one area of the workspace the user is in. |
 | `set_persona` | D | `persona`* | Change the voice Ansel uses with the user, by persona name or slug. |
 
 ## Ansel: memory
@@ -158,19 +158,19 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `get_team_tasks` | R | `period` | In a team workspace, everyone's plate at once: for each member, how many tasks they have open and done in the period and what the open ones are, plus the tasks no one has. |
-| `get_team_digest` | R | none | The team workspace's week in one read: each person's open and finished tasks this week and their timed hours (heavy when over 40), how each team goal moved (its status and reason, what was… |
+| `get_team_tasks` | R | `period`, `workspace` | In a team workspace, everyone's plate at once: for each member, how many tasks they have open and done in the period and what the open ones are, plus the tasks no one has. |
+| `get_team_digest` | R | `workspace` | The team workspace's week in one read: each person's open and finished tasks this week and their timed hours (heavy when over 40), how each team goal moved (its status and reason, what was… |
 
 ## Notebook and meeting notes
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `search_notebook` | R | `text`, `tags`, `book`, `from`, `to`, `source` | Search the user's notebook, its notes and jots, by words, #tags, a saved book, a date range or where it was written. |
+| `search_notebook` | R | `text`, `tags`, `book`, `from`, `to`, `source`, `workspace` | Search the user's notebook, its notes and jots, by words, #tags, a saved book, a date range or where it was written. |
 | `get_notebook_note` | R | `id`* | Read one notebook note in full, with its tags, linked tasks, clipped links (each page's title and description), its photos by id and caption (you can't see the photos), whether it starts a page,… |
 | `list_notebook_tags` | R | none | Every #tag in the notebook with how many notes carry it, most used first. |
-| `list_books` | R | none | The user's notebook books. |
-| `jot` | W | `text`* | Quick capture into Jot, the notebook quick-capture pad. |
-| `create_notebook_note` | W | `body`*, `tags`, `book` | Write a note in the user's notebook. |
+| `list_books` | R | `workspace` | The user's notebook books. |
+| `jot` | W | `text`*, `workspace` | Quick capture into Jot, the notebook quick-capture pad. |
+| `create_notebook_note` | W | `body`*, `tags`, `book`, `workspace` | Write a note in the user's notebook. |
 | `append_to_note` | W | `id`*, `text`* | Add text to the end of a notebook note. |
 | `update_notebook_note` | D | `id`*, `body`, `tags`, `baseUpdatedAt` | Replace a notebook note's text or tags. |
 | `delete_notebook_note` | D | `id`* | Delete a notebook note. |
@@ -182,7 +182,7 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 | `delete_note_photo` | D | `noteId`*, `photoId`* | Delete a photo from a notebook note. |
 | `start_new_page` | D | `id`*, `on` | Make a notebook note start a new page, so it begins on a fresh page in the notebook. |
 | `move_note` | D | `id`*, `targetId`*, `where`* | Move a note above or below another note written the same day, as the user sees them: the notebook lists notes oldest first, and Jot lists jots newest first. |
-| `create_book` | W | `name`*, `tags`, `words` | Create a notebook book: a saved search that gathers notes by tags and words. |
+| `create_book` | W | `name`*, `tags`, `words`, `workspace` | Create a notebook book: a saved search that gathers notes by tags and words. |
 | `rename_book` | D | `book`*, `name`* | Rename a notebook book. |
 | `delete_book` | D | `book`* | Delete a notebook book. |
 
@@ -190,8 +190,8 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `get_notes` | R | none | Get the user's period notes: notes pinned to a day, week, month, quarter or year. |
-| `create_note` | W | `content`*, `title`, `periodType`, `periodDate`, `period` | Pin a note to a period when the user asks for a note on one, like "a note for this week". |
+| `get_notes` | R | `workspace` | Get the user's period notes: notes pinned to a day, week, month, quarter or year. |
+| `create_note` | W | `content`*, `title`, `periodType`, `periodDate`, `period`, `workspace` | Pin a note to a period when the user asks for a note on one, like "a note for this week". |
 | `update_note` | D | `id`*, `title`, `content`, `periodType`, `periodDate`, `period` | Update a period note, or move it to a different period. |
 | `delete_note` | D | `id`* | Delete a period note. |
 | `get_journals` | R | none | Get the user's recent journal entries |
@@ -203,12 +203,12 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `get_lists` | R | none | Get the user's task lists |
-| `create_list` | W | `name`*, `description`, `color` | Create a new task list |
+| `get_lists` | R | `workspace` | Get the user's task lists |
+| `create_list` | W | `name`*, `description`, `color`, `workspace` | Create a new task list |
 | `update_list` | D | `id`*, `name`, `description`, `color` | Rename or update a list's color or description |
 | `delete_list` | D | `name`, `id`, `deleteTasks` | Delete a list — fully interactive. |
-| `get_projects` | R | none | Get the user's projects |
-| `create_project` | W | `name`*, `description`, `color` | Create a new project |
+| `get_projects` | R | `workspace` | Get the user's projects |
+| `create_project` | W | `name`*, `description`, `color`, `workspace` | Create a new project |
 | `update_project` | D | `id`*, `name`, `description`, `color` | Rename or update a project's color or description |
 | `delete_project` | D | `id`*, `deleteTasks` | Delete a project. |
 
@@ -279,14 +279,14 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 | `set_share_link` | D | `cardType`*, `cardName`, `cardId`, `on`*, `canEdit` | Turn a list's or goal's link on or off. |
 | `remove_from_card` | D | `cardType`*, `cardName`, `cardId`, `person`* | Remove someone from a list or goal, or cancel their pending invitation. |
 | `stop_sharing_with_desk` | D | `cardType`*, `cardName`, `cardId`, `desk`* | Stop sharing a list or goal with everyone on a desk; it leaves their desk, and people it was shared with one by one keep it. |
-| `list_desks` | R | none | The user's saved desks in this workspace, their own and the ones shared with them: each desk's name, the user's role on it (owner, editor or viewer), who owns it, how many people it is shared… |
+| `list_desks` | R | `workspace` | The user's saved desks in this workspace, their own and the ones shared with them: each desk's name, the user's role on it (owner, editor or viewer), who owns it, how many people it is shared… |
 | `share_desk` | D | `deskName`, `deskId`, `email`*, `role` | Share one of the user's desks with someone by email, as an editor (the default) or a viewer. |
 
 ## Workspaces
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `list_workspaces` | R | none | The workspaces the user belongs to: their personal workspace and any team workspaces, with the user's role in each and which one is active (the one these tools act in). |
+| `list_workspaces` | R | none | The workspaces the user belongs to: their personal workspace and any team workspaces, with the user's role in each and which one is active: tools work there unless a call names another workspace. |
 | `list_members` | R | `workspace` | The members of a workspace with their roles (owner or member), plus pending invites. |
 | `create_workspace` | W | `name`*, `color` | Create a new team workspace; the user becomes its owner. |
 | `rename_workspace` | D | `workspace`, `name`* | Rename a team workspace. |
