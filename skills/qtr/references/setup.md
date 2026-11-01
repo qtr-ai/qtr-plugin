@@ -1,0 +1,68 @@
+# Connecting to QTR
+
+## Contents
+
+- [The connector](#the-connector)
+- [Connect from Claude, ChatGPT or Claude Code](#connect-from-claude-chatgpt-or-claude-code)
+- [Read-only connections](#read-only-connections)
+- [The REST API](#the-rest-api)
+- [Errors](#errors)
+
+## The connector
+
+The QTR connector is an MCP server at:
+
+```
+https://prodapi.qtr.ai/mcp/sse
+```
+
+The same address takes the Streamable HTTP transport (POST) and the older SSE transport (GET). It needs a QTR Pro plan.
+
+Sign-in is OAuth. QTR opens its own page, shows which site asked and the access level, and the user continues with Google. The sign-in requires PKCE with S256, and the callback must be on claude.ai, claude.com, chatgpt.com or localhost.
+
+## Connect from Claude, ChatGPT or Claude Code
+
+- **Claude or ChatGPT:** Settings → Connectors → add a custom connector with the address above, then sign in when asked.
+- **Claude Code:**
+  ```
+  claude mcp add --transport http qtr https://prodapi.qtr.ai/mcp/sse
+  ```
+  Then run `/mcp` and sign in.
+- **A local QTR API (developers):** `http://localhost:3000/mcp/sse`.
+
+To disconnect, remove the connector in the app. QTR has no hand-made API tokens; the sign-in is the only way in.
+
+## Read-only connections
+
+An app may ask for read-only access (`scope=read`). That connection lists only the read tools. A write tool answers "This QTR connection can only read. Reconnect QTR with write access to make changes." To make changes, the user removes the connector and connects again with read and write.
+
+## The REST API
+
+For scripts, send the sign-in's access token as `Authorization: Bearer <token>`. The base URL is `https://prodapi.qtr.ai`.
+
+```
+GET   /ai/tasks/today
+GET   /ai/tasks/week
+GET   /ai/tasks/overdue
+GET   /ai/goals
+GET   /ai/search?q=<words>
+POST  /ai/tasks             {"title":"...","dueDate":"2026-11-03T09:00:00","priority":"important","isUrgent":true}
+POST  /ai/notes             {"content":"...","title":"optional"}
+POST  /ai/journals          {"content":"...","title":"optional"}
+PATCH /ai/tasks/<id>        {"title":"...","dueDate":"...","priority":"important"}
+PATCH /ai/tasks/<id>/complete
+```
+
+A read-only token can only use the GET routes. Everything else goes through the connector.
+
+## Errors
+
+| What you get | What it means | What to do |
+|---|---|---|
+| 401 | The sign-in expired or was revoked | Ask the user to reconnect QTR |
+| "AI integrations require a QTR Pro plan" | The account isn't on Pro | Point them to app.qtr.ai to upgrade |
+| "This QTR connection can only read" | A read-only connection | They reconnect with write access |
+| "...is not turned on for this account", "Background agents are switched off" | That feature is off | Say so; don't retry |
+| "QTR isn't open on the user's desk" | `get_desk` or `ui_command` with no QTR open | Ask them to open QTR, then try again |
+| `{ error: "..." }` from a tool | The tool refused, with a reason | Tell the user the reason in plain words; search again if an id was wrong |
+| 403 on a REST call | A read-only token on a write route, or someone else's item | Don't retry |

@@ -1,0 +1,14 @@
+{
+  "name": "qtr",
+  "displayName": "QTR",
+  "version": "1.0.0",
+  "description": "Plan your quarter, week and day in QTR from Claude: tasks, goals, notes, focus, calendars and Ansel, QTR's assistant.",
+  "author": {
+    "name": "QTR",
+    "url": "https://qtr.ai"
+  },
+  "homepage": "https://qtr.ai",
+  "repository": "https://github.com/qtr-ai/qtr-plugin",
+  "license": "MIT",
+  "keywords": ["qtr", "planner", "tasks", "goals", "productivity", "calendar", "focus"]
+}

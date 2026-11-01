@@ -1,0 +1,17 @@
+{
+  "name": "qtr-ai",
+  "owner": {
+    "name": "QTR",
+    "url": "https://qtr.ai"
+  },
+  "metadata": {
+    "description": "QTR's plugin for Claude: plan your quarter, week and day in QTR."
+  },
+  "plugins": [
+    {
+      "name": "qtr",
+      "source": "./",
+      "description": "Plan your quarter, week and day in QTR from Claude."
+    }
+  ]
+}

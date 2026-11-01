@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "qtr": {
+      "type": "http",
+      "url": "https://prodapi.qtr.ai/mcp/sse"
+    }
+  }
+}
