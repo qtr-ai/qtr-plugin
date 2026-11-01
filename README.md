@@ -12,7 +12,7 @@
 
 QTR is a planner built around Working Backwards: goals for the quarter, a plan for each week, then the day's tasks. This plugin connects Claude to your QTR account and teaches it how QTR works. Claude can then read and change your tasks, goals, notes, focus sessions and calendars, and work with Ansel, QTR's own assistant.
 
-You need QTR Pro, or a Pro trial.
+Any QTR account works, Free or Pro. The Free plan keeps its limits.
 
 ## Install
 

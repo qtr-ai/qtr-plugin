@@ -16,7 +16,7 @@ The QTR connector is an MCP server at:
 https://prodapi.qtr.ai/mcp/sse
 ```
 
-The same address takes the Streamable HTTP transport (POST) and the older SSE transport (GET). It needs a QTR Pro plan.
+The same address takes the Streamable HTTP transport (POST) and the older SSE transport (GET). Any QTR account can connect, Free or Pro. A Free account has the Free plan's limits on tasks, goals and monthly AI use.
 
 Sign-in is OAuth. QTR opens its own page, shows which site asked and the access level, and the user continues with Google. The sign-in requires PKCE with S256, and the callback must be on claude.ai, claude.com, chatgpt.com or localhost.
 
@@ -60,7 +60,7 @@ A read-only token can only use the GET routes. Everything else goes through the 
 | What you get | What it means | What to do |
 |---|---|---|
 | 401 | The sign-in expired or was revoked | Ask the user to reconnect QTR |
-| "AI integrations require a QTR Pro plan" | The account isn't on Pro | Point them to app.qtr.ai to upgrade |
+| 402, or a message that a limit is reached | A Free account used up its tasks, goals or monthly AI use | Say which limit; Pro lifts it (`open_upgrade`, or app.qtr.ai) |
 | "This QTR connection can only read" | A read-only connection | They reconnect with write access |
 | "...is not turned on for this account", "Background agents are switched off" | That feature is off | Say so; don't retry |
 | "QTR isn't open on the user's desk" | `get_desk` or `ui_command` with no QTR open | Ask them to open QTR, then try again |
