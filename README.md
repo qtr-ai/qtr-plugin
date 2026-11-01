@@ -67,5 +67,5 @@ When the skill changes, Claude tells you once, with what changed. claude.ai, Cla
 ---
 
 <div align="center">
-<sub><a href="https://qtr.ai">qtr.ai</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://help.qtr.ai">Help</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://qtr.ai/privacy">Privacy</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://qtr.ai/terms">Terms</a>&nbsp;&nbsp;&nbsp;&nbsp;MIT licence</sub>
+<sub><a href="https://qtr.ai">qtr.ai</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:support@qtr.ai">support@qtr.ai</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://help.qtr.ai">Help</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://qtr.ai/privacy">Privacy</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://qtr.ai/terms">Terms</a>&nbsp;&nbsp;&nbsp;&nbsp;MIT licence</sub>
 </div>
