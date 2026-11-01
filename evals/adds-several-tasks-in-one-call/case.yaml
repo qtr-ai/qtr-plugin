@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: adds-several-tasks-in-one-call
+expected_outcome: |
+  Claude creates all three tasks with one create_tasks call, Friday as a day and next week as a week, and says where each landed.

@@ -10,21 +10,21 @@ description: >-
   tasks, goals, plans, habits, focus or schedule while QTR tools are available, even if they don't say
   "QTR". Also use it to set up the QTR connector in Claude, ChatGPT or Claude Code.
 compatibility: >-
-  Needs the QTR MCP connector (https://prodapi.qtr.ai/mcp/sse) on a QTR Pro account. A few REST routes
-  work with the same sign-in.
+  Needs the QTR MCP connector (https://prodapi.qtr.ai/mcp/sse) and a QTR account, Free or Pro. A few REST
+  routes work with the same sign-in.
 metadata:
-  version: "1.0.1"
+  version: "1.1.0"
 ---
 
 # QTR
 
-QTR is a planner built around Working Backwards: goals for the quarter, a plan for each week, then the day's tasks. Ansel is QTR's own assistant. The QTR connector gives you nearly everything the app and Ansel can do: about 200 tools, with names like `get_tasks`, `create_task` and `get_day_brief`.
+QTR is a planner built around Working Backwards: goals for the quarter, a plan for each week, then the day's tasks. Ansel is QTR's own assistant. The QTR connector gives you nearly everything the app and Ansel can do: about 190 tools, with names like `get_tasks`, `create_task` and `get_day_brief`.
 
 If the QTR tools aren't available, help the user connect first. The steps are in [references/setup.md](references/setup.md).
 
 ## Keeping this skill current
 
-This is version 1.0.1 of the QTR skill. The first time you use the QTR connector in a conversation, call `get_skill_version` with `version: "1.0.1"`.
+This is version 1.1.0 of the QTR skill. The first time you use the QTR connector in a conversation, call `get_skill_version` with `version: "1.1.0"`.
 
 If `upToDate` is `false`, tell the user once, before your answer: "We've made changes to the QTR skill. Please update it." Add what changed, from `changes`, and the line from `howToUpdate` for the app you're in: `claudeApps` on claude.ai, Claude Desktop or Cowork, `claudeCode` in Claude Code, `otherAgents` anywhere else. Then carry on with the request, and don't bring it up again in that conversation. Any other answer, or no answer, needs no mention.
 
@@ -38,6 +38,22 @@ These ideas shape almost every call, so keep them in mind:
 - **The desk.** In the app, the user works on a desk of cards: Today, Week, Quarter, Inbox, lists, goals, Calendar, Focus. Results often mention cards because that's where they show.
 - **Ansel's changes.** Inside QTR, risky changes wait as proposals the user approves. Routines and background agents leave theirs waiting too. You can list, approve, reject, undo and redo them.
 - **Workspaces.** Everyone has a personal workspace and may be in team workspaces. Tools act in the user's current workspace.
+
+## Views in the chat
+
+In Claude, and other apps that show MCP Apps, these tools also draw an interactive view under your reply, drawn like the cards on the QTR desk:
+
+- `get_tasks`: the tasks, which the user can tick off; for a day, pills switch to another day of that week;
+- `plan_time_blocks`: the day with its meetings and the proposed blocks, with a button that places them;
+- `get_goal_map`: the goal's map as it looks in QTR, or as a list by checkpoint, with its progress; the user can tick tasks off;
+- `list_pending_proposals`: each waiting change, which the user can apply, dismiss, undo or redo;
+- `get_day_brief`: the morning brief or evening wrap, with the top tasks to tick off and Ansel's suggested move to accept;
+- `get_quarter_status`: the quarter's goals, worst first; opening one shows its map;
+- `start_focus`, `pause_focus`, `resume_focus` and `stop_focus`: the focus clock, counting down, with pause, resume and stop.
+
+When a view shows the result, keep your reply short: say what matters, and don't list every item again. What the user does in a view runs as their own action, and the view tells you about it; take that into account instead of repeating it. If a view placed the time blocks, don't call `plan_time_blocks` with `confirm: true` again. If the user paused or stopped the focus from the clock, don't do it again.
+
+A button in a view can also send you a message as the user, such as "Time-block the rest of my day in QTR." Treat it like anything else they type.
 
 ## Rules
 
@@ -67,10 +83,12 @@ These ideas shape almost every call, so keep them in mind:
 | "What's on today / tomorrow / this week?", "What's overdue?" | `get_tasks` with `when` set to their phrase |
 | "What should I do next?" | `prioritize` |
 | "Add: call the bank on Friday" | `create_task` with `periodType: "day"` and that Friday's date |
+| "Add these: call the bank, book the dentist, renew my passport" | `create_tasks`, one call for all of them |
 | "Move everything overdue to this week" | `reschedule_overdue` (rule 1) |
 | "Time-block my day" or "...my week" | `plan_time_blocks` to preview, then again with `confirm: true` once they agree |
 | "What's slipping?", "Am I behind?" | `get_at_risk`, then offer its fixes |
 | "How's my launch goal going?" / "How's my quarter?" | `get_goal_status` / `get_quarter_status` |
+| "Show me my launch goal" | `get_goal_map` |
 | "Review my week", "How did my week go?" | `get_week_review`, then offer `save_week_plan` for the week ahead |
 | "New goal: onboard 5 photographers this quarter" | `create_goal_plan`, worked backwards into checkpoints and tasks |
 | "Map out my fitness goal" | `map_goal` (QTR's AI drafts the map) or `add_checkpoints` (checkpoints you agreed on) |
@@ -83,10 +101,10 @@ These ideas shape almost every call, so keep them in mind:
 | "Turn these meeting notes into tasks" | `meeting_to_tasks` (rule 1) |
 | "Start a 25-minute focus" | `start_focus` |
 | "I ran today" | `check_in_challenge` |
-| "How did the team's week go?", "What's on Priya's plate?" | `get_team_digest`, `get_member_tasks` |
+| "How did the team's week go?", "What's on Priya's plate?" | `get_team_digest`, `get_tasks` with `member` |
 | "What's on my desk?", "Open my Launch goal", "Tidy my desk" | `get_desk`, `ui_command` (QTR must be open on the desk) |
 | "Connect Asana" | `ui_command` with `start_connect` (the user signs in themselves) |
-| "Find everything about the launch" | `search`, or `ask_brain` for a question answered from their own content |
+| "Find everything about the launch" | `search`, then `fetch` to read one result in full, or `ask_brain` for a question answered from their own content |
 
 Everything else, area by area, is in [references/tools.md](references/tools.md).
 
@@ -104,7 +122,7 @@ Everything else, area by area, is in [references/tools.md](references/tools.md).
 1. Agree the outcome and a few checkpoints with the user.
 2. Create it with `create_goal_plan`. Title it without the timeframe, and leave `quarter` and `year` out unless they name another quarter.
 3. For an existing goal, use `add_checkpoints`, then `add_tasks_to_checkpoint`.
-4. Offer `schedule_goal` to put the tasks on days.
+4. Show it with `get_goal_map`, and offer `schedule_goal` to put the tasks on days.
 
 **Clear what's waiting.** Call `list_pending_proposals`. Go through each change with the user: what it would change, and where it came from. Approve or reject only the ones they decide on, one id at a time.
 

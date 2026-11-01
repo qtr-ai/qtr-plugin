@@ -7,8 +7,8 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 ## Contents
 
-- [Tasks: read](#tasks-read) (15)
-- [Tasks: write](#tasks-write) (12)
+- [Tasks: read](#tasks-read) (5)
+- [Tasks: write](#tasks-write) (13)
 - [Search, answers and suggestions](#search-answers-and-suggestions) (7)
 - [Goals and checkpoints](#goals-and-checkpoints) (18)
 - [Ansel: brief, status, risks and plans](#ansel-brief-status-risks-and-plans) (10)
@@ -16,10 +16,10 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 - [Ansel: routines, nudges, background agents and automation](#ansel-routines-nudges-background-agents-and-automation) (12)
 - [Ansel: memory](#ansel-memory) (8)
 - [The open desk](#the-open-desk) (2)
-- [Teams](#teams) (3)
+- [Teams](#teams) (2)
 - [Notebook and meeting notes](#notebook-and-meeting-notes) (20)
 - [Period notes and journals](#period-notes-and-journals) (8)
-- [Lists and projects](#lists-and-projects) (9)
+- [Lists and projects](#lists-and-projects) (8)
 - [Focus](#focus) (9)
 - [Habit challenges](#habit-challenges) (11)
 - [Calendars](#calendars) (6)
@@ -33,16 +33,6 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 | Tool | | Parameters | What it does |
 |---|---|---|---|
 | `get_tasks` | R | `when`, `in`, `member`, `period`, `assignedBy`, `quadrant` | Get the user's tasks. |
-| `get_tasks_for_date` | R | `date`* | Get the user's tasks for a specific day. |
-| `get_today_tasks` | R | none | Get the user's tasks scheduled for today |
-| `get_week_tasks` | R | none | Get the user's tasks for this week |
-| `get_month_tasks` | R | none | Get the user's tasks for this month |
-| `get_quarter_tasks` | R | none | Get the user's tasks for this quarter |
-| `get_year_tasks` | R | none | Get the user's tasks for this year |
-| `get_inbox_tasks` | R | none | Get unscheduled tasks (inbox / no specific period) |
-| `get_overdue_tasks` | R | none | Get the user's overdue tasks |
-| `get_flagged_tasks` | R | `quadrant`* | Get the user's open tasks by their important and urgent marks, across every period (inbox, today, this week and on), as the Important, Urgent and Matrix cards show them. |
-| `get_project_tasks` | R | `id`* | Get all tasks inside a specific project |
 | `get_task_comments` | R | `id`* | What people have said on a task: its newest 50 comments, oldest first, as { authorName, createdAt, text }. |
 | `get_task_links` | R | `id`* | Where a task is linked in a connected app (Asana, Todoist, ClickUp): the app, the link to open the task there, and its sync state. |
 | `get_app_comments` | R | `taskId`* | The comments on a task that came from a connected app (Asana, ClickUp or Todoist), oldest first, with who wrote each and when. |
@@ -53,6 +43,7 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 | Tool | | Parameters | What it does |
 |---|---|---|---|
 | `create_task` | W | `title`*, `description`, `periodType`, `periodDate`, `period`, `dueDate`, `endDateTime`, `duration`, `priority`, `isUrgent`, `isTopPriority`, `listId`, `projectId`, `goalId`, `parentTaskId`, `recurrenceRule`, `recurrenceStartDate`, `recurrenceEndDate`, `recurrenceTimezone`, `forceSchedule`, `calendarId`, `assignee` | Create a new task. |
+| `create_tasks` | W | `tasks`* | Create several tasks in one call, from 1 to 50, each set up as create_task would. |
 | `create_recurring_task` | W | `title`, `frequency`, `daysOfWeek`, `interval`, `startDate`, `endDate`, `time`, `goalId`, `listId`, `projectId`, `timezone` | Create a recurring task interactively. |
 | `update_task` | D | `id`*, `title`, `description`, `dueDate`, `endDateTime`, `duration`, `priority`, `isUrgent`, `isTopPriority`, `isHighlighted`, `status`, `periodType`, `periodDate`, `period`, `listId`, `projectId`, `assignee`, `removeFromList`, `removeFromProject`, `removeFromGoal`, `removeRecurrence`, `recurrenceRule`, `recurrenceEndDate`, `recurrenceTimezone`, `updateAllOccurrences`, `forceSchedule` | Update a task's properties. |
 | `complete_task` | D | `id`* | Mark a task as complete (done) |
@@ -69,20 +60,20 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `search` | R | `q`* | Semantic search across the user's tasks, goals, notes, journals and notebook (notebook hits have type Notebook). |
+| `search` | R | `query`* | Semantic search across the user's tasks, goals, notes, journals and notebook (notebook hits have type Notebook). |
+| `fetch` | R | `id`* | Read one item in full by its id from search: a task, goal, journal, note or notebook note, with its whole text and a link to open QTR. |
 | `ask_brain` | R | `question`* | Answer a question about the user's own content by retrieving the most relevant tasks/goals/notes/journals/notebook notes as citeable sources. |
 | `find_tag` | R | `tag`* | Everything tagged with one #tag, grouped by where it lives: notebook notes and jots, tasks, goals and period notes. |
 | `prioritize` | R | none | Recommend what the user should focus on now/next, reasoning over today's tasks, overdue items, goals, and working hours. |
 | `summarize` | R | `scope`, `query` | Produce a concise narrative summary of the user's work, or the data to write one from. |
 | `suggest_time_for_task` | R | `durationMinutes`*, `date`, `maxSlots` | Find the best available time slots for a task of a given duration. |
-| `help` | R | none | Show all available QTR actions and how to use them |
 
 ## Goals and checkpoints
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
 | `get_goals` | R | none | Get the user's active goals |
-| `get_goal_tasks` | R | `id`* | Get all tasks linked to a specific goal |
+| `get_goal_map` | R | `goalId`* | One goal's map: its checkpoints in order, the tasks under each and whether they are done, the goal's tasks under no checkpoint, and its progress. |
 | `get_goal_progress` | R | `goalId`* | How one goal is going: tasks done and left, percent complete, its hill (height 0 to 1 and whether its score is climbing, flat or sliding) and its score this week. |
 | `create_goal_plan` | W | `title`*, `description`, `color`, `quarter`, `year`, `nodes`* | Create a quarterly goal with a visual roadmap. |
 | `map_goal` | D | `goalId`*, `answers`, `asked` | Have QTR map out a goal the user already has, in one go: checkpoints, the tasks for each, and steps for the tasks that need them, all added to its map. |
@@ -167,7 +158,6 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `get_member_tasks` | R | `member`*, `period`, `assignedBy` | In a team workspace, the tasks one person has: "what's on Priya's plate this week?", "what has Kim got open?", "what did Priya give me?". |
 | `get_team_tasks` | R | `period` | In a team workspace, everyone's plate at once: for each member, how many tasks they have open and done in the period and what the open ones are, plus the tasks no one has. |
 | `get_team_digest` | R | none | The team workspace's week in one read: each person's open and finished tasks this week and their timed hours (heavy when over 40), how each team goal moved (its status and reason, what was… |
 
@@ -214,7 +204,6 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 | Tool | | Parameters | What it does |
 |---|---|---|---|
 | `get_lists` | R | none | Get the user's task lists |
-| `get_list_tasks` | R | `id`* | Get tasks inside a specific list |
 | `create_list` | W | `name`*, `description`, `color` | Create a new task list |
 | `update_list` | D | `id`*, `name`, `description`, `color` | Rename or update a list's color or description |
 | `delete_list` | D | `name`, `id`, `deleteTasks` | Delete a list — fully interactive. |

@@ -39,10 +39,22 @@ Tasks, goals, notes, focus, calendars, sharing and Ansel, asked for in your own 
 
 ![Six QTR cards on the desk, each with something you can ask: Today, "Brief me on today." This week, "Move everything overdue to this week." Q4 goals, "Map out my launch goal." Notebook, "Turn my meeting notes into tasks." Focus, "Time-block my afternoon, then start a focus." Ansel, "What's waiting for my approval?"](assets/asks.jpg)
 
+In Claude, these answers come with a view you can work in, right in the chat, drawn like the cards on your QTR desk:
+
+- **Your tasks**: tick them off, or switch to another day of the week.
+- **Time blocks**: your day with its meetings and the proposed blocks; place them in one click.
+- **A goal's map**: the map as you drew it in QTR, or a list by checkpoint, with how far along it is.
+- **Ansel's waiting changes**: apply, dismiss, undo or redo each one.
+- **Your morning brief or evening wrap**: tick off the top three and say yes to Ansel's suggested move.
+- **The quarter**: every goal, worst first; open one to see its map.
+- **The focus clock**: watch it count down, then pause, resume or stop.
+
 ## What's inside
 
-- **The QTR connector**: QTR's remote MCP server at `https://prodapi.qtr.ai/mcp/sse`, signed in with OAuth.
+- **The QTR connector**: QTR's remote MCP server at `https://prodapi.qtr.ai/mcp/sse`, signed in with OAuth. For a connection that can only read, use `https://prodapi.qtr.ai/mcp/readonly`.
 - **The `qtr` skill**: how QTR works (periods, goal maps, the desk, Ansel's proposals), the rules Claude follows before it changes anything, and every tool by area.
+- **Commands for Claude Code**: `/qtr:today`, `/qtr:add`, `/qtr:plan-week`, `/qtr:review`, `/qtr:goal` and `/qtr:approvals`.
+- **Tests**: cases in `evals/` that run against stand-ins for QTR, with `claude plugin eval .`
 
 Nothing runs on your machine: no hooks and no local servers.
 
@@ -51,6 +63,7 @@ Nothing runs on your machine: no hooks and no local servers.
 - Claude reaches QTR only through the connector, over HTTPS. The sign-in lets Claude act as you in QTR and nowhere else.
 - Your data stays in QTR, as its [privacy policy](https://qtr.ai/privacy) describes.
 - Tool calls run as soon as Claude makes them. Claude asks before anything that deletes, changes many things at once or reaches other people, and the tools that change or remove data are marked so Claude asks before each one.
+- On the Free plan, the app's limits apply here too: 50 tasks a month, 10 goals in total, 3 projects and 50 notes a month, and 5,000 tokens of QTR's AI a month. Pro has none. The connector has no rate limit of its own.
 - To disconnect, remove the connector.
 
 ## Updates

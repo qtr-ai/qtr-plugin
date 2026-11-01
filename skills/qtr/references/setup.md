@@ -5,6 +5,7 @@
 - [The connector](#the-connector)
 - [Connect from Claude, ChatGPT or Claude Code](#connect-from-claude-chatgpt-or-claude-code)
 - [Read-only connections](#read-only-connections)
+- [Plan limits](#plan-limits)
 - [The REST API](#the-rest-api)
 - [Errors](#errors)
 
@@ -34,7 +35,28 @@ To disconnect, remove the connector in the app. QTR has no hand-made API tokens;
 
 ## Read-only connections
 
-An app may ask for read-only access (`scope=read`). That connection lists only the read tools. A write tool answers "This QTR connection can only read. Reconnect QTR with write access to make changes." To make changes, the user removes the connector and connects again with read and write.
+There are two ways to connect read-only:
+
+- Add `https://prodapi.qtr.ai/mcp/readonly` instead of `/mcp/sse`. That address lists only the read tools, whatever the sign-in allows.
+- An app may ask for read-only access (`scope=read`). That connection lists only the read tools too.
+
+On a read-only connection, a write tool answers "This QTR connection can only read. Reconnect QTR with write access to make changes." To make changes, the user removes the connector and connects again with read and write, at `/mcp/sse`.
+
+## Plan limits
+
+The Free plan has the same limits through the connector as in the app:
+
+| What | Free | Pro |
+|---|---|---|
+| Tasks | 50 a month | No limit |
+| Goals | 10 in total | No limit |
+| Projects | 3 a month | No limit |
+| Notes | 50 a month | No limit |
+| QTR's own AI, when a tool uses it | 5,000 tokens a month | No limit |
+
+Tasks that come in from calendars and connected apps don't count. A tool that would go over a limit refuses with the reason, and creates nothing past it. Moving from Free to Pro counts from the next call, with no need to reconnect.
+
+The connector has no rate limit of its own.
 
 ## The REST API
 

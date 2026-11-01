@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: checks-skill-version
+expected_outcome: |
+  On its first use of the connector Claude checks the skill version with version 1.1.0, says nothing about updating since it is current, and lists the three overdue tasks.

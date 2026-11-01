@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: asks-before-moving-overdue
+expected_outcome: |
+  Claude reads what is overdue, tells the user what would move, and asks before calling reschedule_overdue, so nothing moves in this single turn.
