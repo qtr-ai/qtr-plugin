@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: previews-time-blocks
+expected_outcome: |
+  Claude previews the blocks with plan_time_blocks, shows them with their times, and asks before placing them; it never calls with confirm true in this turn.

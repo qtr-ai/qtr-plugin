@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: shows-goal-map
+expected_outcome: |
+  Claude finds the goal with get_goals, reads its map with get_goal_map, and says how far along it is and what is next.

@@ -17,9 +17,9 @@
 - **`get_tasks`** is the main read.
   - `when` takes the user's phrase: today, tomorrow, a weekday, "next friday", a date, this week, this month, this quarter, this year, inbox or overdue.
   - `in` reads one project, list or goal instead.
-  - `quadrant` reads the important and urgent marks across every period.
-- **Fixed-period reads:** `get_today_tasks`, `get_week_tasks`, `get_month_tasks`, `get_quarter_tasks`, `get_year_tasks`, `get_inbox_tasks` and `get_overdue_tasks` match `get_tasks` with that `when`. `get_tasks_for_date` reads one day.
-- **The Eisenhower matrix:** `get_flagged_tasks` with `quadrant` set to `important`, `urgent`, `both` or `neither`.
+  - `quadrant` reads the important and urgent marks across every period: `important`, `urgent`, `both` or `neither`.
+  - In Claude and other apps that show views, the result appears as a task list the user can tick off.
+- **One item in full:** `fetch` with an id from `search` reads a task, goal, journal, note or notebook note with its whole text.
 - **Around a task:**
   - `get_task_comments` reads comments from people in QTR; `get_app_comments` reads comments from Asana, Todoist or ClickUp.
   - `get_task_links` gives the task's link in the connected app.
@@ -37,6 +37,7 @@ The commitment matters more than the clock:
 | "sometime", "later", no time at all | leave the period out: it lands in Today, or say `inbox` for no period |
 
 - **Repeating tasks:** `create_task` takes `recurrenceRule` as an RRULE, for example `FREQ=WEEKLY;BYDAY=MO`, with `recurrenceStartDate`, `recurrenceEndDate` and `recurrenceTimezone`. `create_recurring_task` builds one step by step.
+- **Several at once:** `create_tasks` takes up to 50 tasks, each set up as `create_task` would be, in one call. It makes each one on its own and lists any it couldn't, with why; a Free plan limit stops the rest.
 - **Subtasks:** pass `parentTaskId`.
 - **Placement:**
   - `listId`, `projectId` and `goalId` place the task.
@@ -95,7 +96,7 @@ Tasks added to a map land in the goal's quarter without a day. Don't call them s
 | Need | Tool |
 |---|---|
 | The user's active goals | `get_goals` |
-| The goal's tasks and checkpoints | `get_goal_tasks` |
+| The goal's checkpoints and the tasks under each | `get_goal_map`, shown as the goal's map where the app can |
 | Progress numbers, its hill and score | `get_goal_progress` |
 | On track or not, and why | `get_goal_status` |
 | Rename, tick off, reorder or delete a checkpoint | `update_checkpoint`, `reorder_checkpoints`, `delete_checkpoint` |
@@ -129,9 +130,9 @@ For a week's or quarter's plan, use the plan tools in [ansel.md](ansel.md), not 
 
 ## Lists and projects
 
-- **Lists:** `get_lists`, `get_list_tasks`, `create_list`, `update_list`, `delete_list`. Deleting asks whether to keep the tasks.
+- **Lists:** `get_lists`, `get_tasks` with `in.listId`, `create_list`, `update_list`, `delete_list`. Deleting asks whether to keep the tasks.
 - **Adding a task to a list:** `assign_task_to_list` finds the list by name and offers to create it.
-- **Projects:** `get_projects`, `get_project_tasks`, `create_project`, `update_project`, `delete_project`.
+- **Projects:** `get_projects`, `get_tasks` with `in.projectId`, `create_project`, `update_project`, `delete_project`.
 
 ## Focus
 
