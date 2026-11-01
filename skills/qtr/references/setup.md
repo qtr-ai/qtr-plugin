@@ -14,7 +14,7 @@
 The QTR connector is an MCP server at:
 
 ```
-https://prodapi.qtr.ai/mcp/sse
+https://api.qtr.ai/mcp/sse
 ```
 
 The same address takes the Streamable HTTP transport (POST) and the older SSE transport (GET). Any QTR account can connect, Free or Pro. A Free account has the Free plan's limits on tasks, goals and monthly AI use.
@@ -27,7 +27,7 @@ Sign-in is OAuth. QTR opens its own page, shows which site asked and the access 
 - **Claude Code with the QTR plugin:** the plugin brings the connector with it. Run `/mcp` and sign in.
 - **Claude Code without the plugin:**
   ```
-  claude mcp add --transport http qtr https://prodapi.qtr.ai/mcp/sse
+  claude mcp add --transport http qtr https://api.qtr.ai/mcp/sse
   ```
   Then run `/mcp` and sign in.
 
@@ -37,7 +37,7 @@ To disconnect, remove the connector in the app. QTR has no hand-made API tokens;
 
 There are two ways to connect read-only:
 
-- Add `https://prodapi.qtr.ai/mcp/readonly` instead of `/mcp/sse`. That address lists only the read tools, whatever the sign-in allows.
+- Add `https://api.qtr.ai/mcp/readonly` instead of `/mcp/sse`. That address lists only the read tools, whatever the sign-in allows.
 - An app may ask for read-only access (`scope=read`). That connection lists only the read tools too.
 
 On a read-only connection, a write tool answers "This QTR connection can only read. Reconnect QTR with write access to make changes." To make changes, the user removes the connector and connects again with read and write, at `/mcp/sse`.
@@ -60,7 +60,7 @@ The connector has no rate limit of its own.
 
 ## The REST API
 
-For scripts, send the sign-in's access token as `Authorization: Bearer <token>`. The base URL is `https://prodapi.qtr.ai`.
+For scripts, send the sign-in's access token as `Authorization: Bearer <token>`. The base URL is `https://api.qtr.ai`.
 
 ```
 GET   /ai/tasks/today

@@ -31,7 +31,7 @@ Then run `/mcp` and sign in to QTR.
 npx skills add qtr-ai/qtr-plugin
 ```
 
-Then add `https://prodapi.qtr.ai/mcp/sse` as an MCP server and sign in.
+Then add `https://api.qtr.ai/mcp/sse` as an MCP server and sign in.
 
 ## Nearly everything you do in QTR, now through your agents
 
@@ -51,7 +51,7 @@ In Claude, these answers come with a view you can work in, right in the chat, dr
 
 ## What's inside
 
-- **The QTR connector**: QTR's remote MCP server at `https://prodapi.qtr.ai/mcp/sse`, signed in with OAuth. For a connection that can only read, use `https://prodapi.qtr.ai/mcp/readonly`.
+- **The QTR connector**: QTR's remote MCP server at `https://api.qtr.ai/mcp/sse`, signed in with OAuth. For a connection that can only read, use `https://api.qtr.ai/mcp/readonly`.
 - **The `qtr` skill**: how QTR works (periods, goal maps, the desk, Ansel's proposals), the rules Claude follows before it changes anything, and every tool by area.
 - **Commands for Claude Code**: `/qtr:today`, `/qtr:add`, `/qtr:plan-week`, `/qtr:review`, `/qtr:goal` and `/qtr:approvals`.
 - **Tests**: cases in `evals/` that run against stand-ins for QTR, with `claude plugin eval .`

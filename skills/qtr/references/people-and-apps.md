@@ -13,7 +13,7 @@ Most of these reach other people or change connections. Confirm before each chan
 
 ## Teams
 
-These need a team workspace:
+These need a team workspace, named with `workspace`:
 
 | The user says | Use |
 |---|---|
@@ -38,7 +38,7 @@ These need a team workspace:
 
 ## Workspaces
 
-- **Read:** `list_workspaces` shows the user's workspaces, their role and which one is current. `list_members` shows a workspace's members and pending invites.
+- **Read:** `list_workspaces` shows the user's workspaces and their role in each. `list_members` shows a workspace's members and pending invites.
 - **Create and edit:** `create_workspace`, `rename_workspace`, and `set_workspace_icon` (owner only).
 - **Invite:** `invite_member` sends an email invite. `create_invite_link` and `revoke_invite_link` manage the invite link (owner only).
 - **Members:**
@@ -46,7 +46,10 @@ These need a team workspace:
   - `change_member_role` hands ownership to another member, and the user becomes a member.
   - `leave_workspace`: an owner must hand the workspace over first.
 
-Tools act in the user's current workspace. To work in another one, ask the user to switch, or use `ui_command` with `switch_workspace` while QTR is open.
+Tools work in the user's personal workspace unless a call names another:
+- To read, add or plan in a team workspace, pass its name or id from `list_workspaces` as `workspace`. The tools that list, add or plan take it, such as `get_tasks`, `get_team_tasks`, `create_task`, `get_goals` and `get_day_brief`; `tools.md` shows which.
+- Changing, completing or deleting an item by its id works in any workspace the user is in, without `workspace`.
+- Switching workspace in the QTR app doesn't change where these tools work.
 
 ## Calendars
 

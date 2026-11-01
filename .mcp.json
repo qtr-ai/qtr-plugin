@@ -2,7 +2,7 @@
   "mcpServers": {
     "qtr": {
       "type": "http",
-      "url": "https://prodapi.qtr.ai/mcp/sse"
+      "url": "https://api.qtr.ai/mcp/sse"
     }
   }
 }
