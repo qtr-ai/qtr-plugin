@@ -35,7 +35,7 @@ Then add `https://api.qtr.ai/mcp/sse` as an MCP server and sign in.
 
 ## Nearly everything you do in QTR, now through your agents
 
-Tasks, goals, notes, focus, calendars, sharing and Ansel, asked for in your own words.
+Tasks, goals, notes, focus, calendars, sharing and Ansel, asked for in your own words. In a team workspace too: name it ("my tasks in Design Team today") and Claude works there.
 
 ![Six QTR cards on the desk, each with something you can ask: Today, "Brief me on today." This week, "Move everything overdue to this week." Q4 goals, "Map out my launch goal." Notebook, "Turn my meeting notes into tasks." Focus, "Time-block my afternoon, then start a focus." Ansel, "What's waiting for my approval?"](assets/asks.jpg)
 
