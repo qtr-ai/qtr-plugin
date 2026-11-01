@@ -41,14 +41,19 @@ These ideas shape almost every call, so keep them in mind:
 
 ## Views in the chat
 
-In Claude, and other apps that show MCP Apps, four tools also draw an interactive view under your reply:
+In Claude, and other apps that show MCP Apps, these tools also draw an interactive view under your reply, drawn like the cards on the QTR desk:
 
-- `get_tasks`: the tasks, which the user can tick off;
+- `get_tasks`: the tasks, which the user can tick off; for a day, pills switch to another day of that week;
 - `plan_time_blocks`: the day with its meetings and the proposed blocks, with a button that places them;
-- `get_goal_map`: the goal's checkpoints and tasks, with its progress, which the user can tick off;
-- `list_pending_proposals`: each waiting change, which the user can approve, reject or undo.
+- `get_goal_map`: the goal's map as it looks in QTR, or as a list by checkpoint, with its progress; the user can tick tasks off;
+- `list_pending_proposals`: each waiting change, which the user can apply, dismiss, undo or redo;
+- `get_day_brief`: the morning brief or evening wrap, with the top tasks to tick off and Ansel's suggested move to accept;
+- `get_quarter_status`: the quarter's goals, worst first; opening one shows its map;
+- `start_focus`, `pause_focus`, `resume_focus` and `stop_focus`: the focus clock, counting down, with pause, resume and stop.
 
-When a view shows the result, keep your reply short: say what matters, and don't list every item again. What the user does in a view runs as their own action, and the view tells you about it; take that into account instead of repeating it. If a view placed the time blocks, don't call `plan_time_blocks` with `confirm: true` again.
+When a view shows the result, keep your reply short: say what matters, and don't list every item again. What the user does in a view runs as their own action, and the view tells you about it; take that into account instead of repeating it. If a view placed the time blocks, don't call `plan_time_blocks` with `confirm: true` again. If the user paused or stopped the focus from the clock, don't do it again.
+
+A button in a view can also send you a message as the user, such as "Time-block the rest of my day in QTR." Treat it like anything else they type.
 
 ## Rules
 

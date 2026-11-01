@@ -4,7 +4,7 @@ The QTR connector reads the newest entry and shows it to people on an older vers
 
 ## 1.1.0 (2026-11-01)
 
-- In Claude, your tasks, time blocks, a goal's map and Ansel's waiting changes now show as views you can tick off, place and approve in the chat.
+- In Claude, your tasks, time blocks, a goal's map, Ansel's waiting changes, your daily brief, the quarter and the focus clock now show in the chat, drawn like your QTR desk, and you can work in them there.
 - Add several tasks in one go, read any search result in full, and use the new /qtr: commands in Claude Code.
 
 ## 1.0.1 (2026-11-01)

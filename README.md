@@ -39,12 +39,15 @@ Tasks, goals, notes, focus, calendars, sharing and Ansel, asked for in your own 
 
 ![Six QTR cards on the desk, each with something you can ask: Today, "Brief me on today." This week, "Move everything overdue to this week." Q4 goals, "Map out my launch goal." Notebook, "Turn my meeting notes into tasks." Focus, "Time-block my afternoon, then start a focus." Ansel, "What's waiting for my approval?"](assets/asks.jpg)
 
-In Claude, four answers come with a view you can work in, right in the chat:
+In Claude, these answers come with a view you can work in, right in the chat, drawn like the cards on your QTR desk:
 
-- **Your tasks**: tick them off.
+- **Your tasks**: tick them off, or switch to another day of the week.
 - **Time blocks**: your day with its meetings and the proposed blocks; place them in one click.
-- **A goal's map**: its checkpoints and tasks, with how far along it is.
-- **Ansel's waiting changes**: approve, reject or undo each one.
+- **A goal's map**: the map as you drew it in QTR, or a list by checkpoint, with how far along it is.
+- **Ansel's waiting changes**: apply, dismiss, undo or redo each one.
+- **Your morning brief or evening wrap**: tick off the top three and say yes to Ansel's suggested move.
+- **The quarter**: every goal, worst first; open one to see its map.
+- **The focus clock**: watch it count down, then pause, resume or stop.
 
 ## What's inside
 
