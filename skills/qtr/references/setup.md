@@ -23,12 +23,12 @@ Sign-in is OAuth. QTR opens its own page, shows which site asked and the access 
 ## Connect from Claude, ChatGPT or Claude Code
 
 - **Claude or ChatGPT:** Settings → Connectors → add a custom connector with the address above, then sign in when asked.
-- **Claude Code:**
+- **Claude Code with the QTR plugin:** the plugin brings the connector with it. Run `/mcp` and sign in.
+- **Claude Code without the plugin:**
   ```
   claude mcp add --transport http qtr https://prodapi.qtr.ai/mcp/sse
   ```
   Then run `/mcp` and sign in.
-- **A local QTR API (developers):** `http://localhost:3000/mcp/sse`.
 
 To disconnect, remove the connector in the app. QTR has no hand-made API tokens; the sign-in is the only way in.
 
