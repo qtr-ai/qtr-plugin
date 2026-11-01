@@ -7,7 +7,7 @@ You need a QTR account on the Pro plan or a Pro trial.
 ## What's inside
 
 - **The QTR connector**: QTR's remote MCP server at `https://prodapi.qtr.ai/mcp/sse`. You sign in to QTR with Google the first time Claude uses it.
-- **The `qtr` skill**: how QTR works (periods, goal maps, the desk, Ansel's proposals), the rules Claude follows before changing anything, and a list of all 200 tools by area.
+- **The `qtr` skill**: how QTR works (periods, goal maps, the desk, Ansel's proposals), the rules Claude follows before changing anything, and a list of every tool, by area.
 
 The plugin has no hooks, scripts or local servers. It runs nothing on your machine.
 
@@ -29,6 +29,16 @@ npx skills add qtr-ai/qtr-plugin
 ```
 
 Then add the connector `https://prodapi.qtr.ai/mcp/sse` in that agent's MCP settings.
+
+## Updates
+
+When we change the skill, the QTR connector tells Claude, and Claude lets you know once, with what changed and how to update.
+
+- **claude.ai, Claude Desktop and Cowork** update the plugin by themselves.
+- **Claude Code**: run `claude plugin update qtr@qtr-ai`, or turn on auto-update under `/plugin` → Marketplaces → `qtr-ai` → Enable auto-update.
+- **Other agents**: run `npx skills update`.
+
+What changed in each version is in [CHANGELOG.md](CHANGELOG.md).
 
 ## What data goes where
 

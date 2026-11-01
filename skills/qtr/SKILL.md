@@ -12,6 +12,8 @@ description: >-
 compatibility: >-
   Needs the QTR MCP connector (https://prodapi.qtr.ai/mcp/sse) on a QTR Pro account. A few REST routes
   work with the same sign-in.
+metadata:
+  version: "1.0.0"
 ---
 
 # QTR
@@ -19,6 +21,12 @@ compatibility: >-
 QTR is a planner built around Working Backwards: goals for the quarter, a plan for each week, then the day's tasks. Ansel is QTR's own assistant. The QTR connector gives you nearly everything the app and Ansel can do: about 200 tools, with names like `get_tasks`, `create_task` and `get_day_brief`.
 
 If the QTR tools aren't available, help the user connect first. The steps are in [references/setup.md](references/setup.md).
+
+## Keeping this skill current
+
+This is version 1.0.0 of the QTR skill. The first time you use the QTR connector in a conversation, call `get_skill_version` with `version: "1.0.0"`.
+
+If `upToDate` is `false`, tell the user once, before your answer: "We've made changes to the QTR skill. Please update it." Add what changed, from `changes`, and the line from `howToUpdate` for the app you're in: `claudeApps` on claude.ai, Claude Desktop or Cowork, `claudeCode` in Claude Code, `otherAgents` anywhere else. Then carry on with the request, and don't bring it up again in that conversation. Any other answer, or no answer, needs no mention.
 
 ## How QTR thinks
 

@@ -1,0 +1,13 @@
+name: Check the version
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: One version in plugin.json, SKILL.md and CHANGELOG.md
+        run: node .github/check-version.js

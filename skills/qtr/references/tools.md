@@ -1,6 +1,6 @@
 # QTR connector tools
 
-Every tool the QTR connector offers, by area. Generated from the connector's own tool definitions; the connector sends each tool's full description and parameter schema to the AI app, so use this file to find the right tool, then read its schema.
+Every tool the QTR connector offers, by area. Generated from the connector's own tool list; the connector sends each tool's full description and parameter schema to the AI app, so use this file to find the right tool, then read its schema.
 
 - **R** reads, and works on a read-only connection. **W** adds something new to the user's account. **D** changes or removes something, so Claude and ChatGPT ask before each call.
 - `*` marks a required parameter.
@@ -26,7 +26,7 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 - [Connected apps (Asana, Todoist, ClickUp)](#connected-apps-asana-todoist-clickup) (8)
 - [Sharing and desks](#sharing-and-desks) (11)
 - [Workspaces](#workspaces) (11)
-- [Account, settings and support](#account-settings-and-support) (14)
+- [Account, settings and support](#account-settings-and-support) (15)
 
 ## Tasks: read
 
@@ -327,3 +327,4 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 | `report_problem` | D | `description`*, `subject`, `category`, `severity` | Report a problem or bug with QTR to the QTR support team as a ticket. |
 | `get_my_tickets` | R | `id` | The support tickets the user sent QTR and their status, newest first; pass id for one ticket with its latest replies from support. |
 | `reply_to_ticket` | D | `id`*, `body`* | Reply to one of the user's support tickets, as the user. |
+| `get_skill_version` | R | `version` | The newest version of the QTR skill, what changed in it, and how to update it in each app. |
