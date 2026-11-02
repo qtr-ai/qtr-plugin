@@ -27,6 +27,7 @@ Both tools work only while QTR is open on the desk.
 - **View-only desks:** a desk shared with the user only to view can't be rearranged, and the result says so.
 - **Data:** desk commands never change data. Move or complete tasks, and start or stop focus, with the task and focus tools. The connector refuses data commands and points you to the right tool.
 - **Receipts:** each command leaves a receipt in Ansel's chat in the app, so the user can see what you did.
+- **Tile, not snap:** the desk calls snapping Tile. `snap_card` tiles a card, `unsnap_card` untiles it, `snap_all` and `unsnap_all` are Tile all and Untile all, and a card marked `snapped` is tiled. Say tile, untile and tiled to the user, never snap.
 
 ## Desk commands
 
