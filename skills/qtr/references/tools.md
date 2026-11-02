@@ -152,7 +152,7 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 | Tool | | Parameters | What it does |
 |---|---|---|---|
 | `get_desk` | R | `cardId` | Read the desk the user has open in QTR right now: its name, the cards on it front to back, and what each card shows (tasks, goals, notes). |
-| `ui_command` | D | `command`*, `args` | Do something on the desk the user has open in QTR, the way they would by hand: open, focus, tuck, move, resize, snap or full-screen a card, deal or tidy the desk, flip a goal card between list and… |
+| `ui_command` | D | `command`*, `args` | Do something on the desk the user has open in QTR, the way they would by hand: open, focus, tuck, move, resize, tile or full-screen a card, deal or tidy the desk, flip a goal card between list and… |
 
 ## Teams
 
