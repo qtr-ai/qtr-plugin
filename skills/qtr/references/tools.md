@@ -32,7 +32,7 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `get_tasks` | R | `when`, `in`, `member`, `period`, `assignedBy`, `quadrant`, `workspace` | Get the user's tasks. |
+| `get_tasks` | R | `when`, `in`, `member`, `period`, `assignedBy`, `quadrant`, `workspace`, `cursor` | Get the user's tasks. |
 | `get_task_comments` | R | `id`* | What people have said on a task: its newest 50 comments, oldest first, as { authorName, createdAt, text }. |
 | `get_task_links` | R | `id`* | Where a task is linked in a connected app (Asana, Todoist, ClickUp): the app, the link to open the task there, and its sync state. |
 | `get_app_comments` | R | `taskId`* | The comments on a task that came from a connected app (Asana, ClickUp or Todoist), oldest first, with who wrote each and when. |
@@ -72,7 +72,7 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `get_goals` | R | `workspace` | Get the user's active goals |
+| `get_goals` | R | `workspace`, `cursor` | Get the user's active goals. |
 | `get_goal_map` | R | `goalId`* | One goal's map: its checkpoints in order, the tasks under each and whether they are done, the goal's tasks under no checkpoint, and its progress. |
 | `get_goal_progress` | R | `goalId`* | How one goal is going: tasks done and left, percent complete, its hill (height 0 to 1 and whether its score is climbing, flat or sliding) and its score this week. |
 | `create_goal_plan` | W | `title`*, `description`, `color`, `quarter`, `year`, `nodes`*, `workspace` | Create a quarterly goal with a visual roadmap. |
@@ -140,7 +140,7 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 |---|---|---|---|
 | `recall` | R | `query`, `from`, `to` | Look back at what the user and Ansel talked about and what Ansel remembers, with dates: day recaps (what was planned, decided and left open) and memory items, including ones that were replaced or… |
 | `get_memory` | R | `topic` | What Ansel remembers about the user, from both places it is kept: - memories: the memory graph (traits, routines, patterns, people and focus areas, learned from their activity or told by them),… |
-| `remember` | W | `fact`*, `kind`, `slot`, `until` | Remember a fact the user tells you about themself, e.g. |
+| `remember` | W | `fact`*, `kind`, `slot`, `until` | Save something the user tells you about themself, straight away: when they ask you to remember something ("remember that my sister's birthday is 3 May") or plainly state a lasting fact,… |
 | `correct_memory` | D | `nodeId`*, `text`* | Correct a memory that is wrong, e.g. |
 | `pin_memory` | D | `nodeId`* | Pin a memory so QTR keeps it exactly as it is and stops changing or fading it, e.g. |
 | `unpin_memory` | D | `nodeId`* | Unpin a memory so QTR may update or fade it again as it learns, e.g. |
@@ -190,7 +190,7 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `get_notes` | R | `workspace` | Get the user's period notes: notes pinned to a day, week, month, quarter or year. |
+| `get_notes` | R | `workspace` | Get the user's period notes: notes pinned to a day, week, quarter or year. |
 | `create_note` | W | `content`*, `title`, `periodType`, `periodDate`, `period`, `workspace` | Pin a note to a period when the user asks for a note on one, like "a note for this week". |
 | `update_note` | D | `id`*, `title`, `content`, `periodType`, `periodDate`, `period` | Update a period note, or move it to a different period. |
 | `delete_note` | D | `id`* | Delete a period note. |

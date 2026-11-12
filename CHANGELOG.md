@@ -2,6 +2,11 @@
 
 The QTR connector reads the newest entry and shows it to people on an older version of the skill, so write each entry for them: what they can do now, in a line or two.
 
+## 1.1.3 (2026-11-12)
+
+- Ask Claude for a note on a day, a week, a quarter or a year and it lands on that card on your desk; Claude can also link a notebook note to a task.
+- Busy weeks and long goal lists come back in pages, so Claude answers quickly and counts every item.
+
 ## 1.1.2 (2026-11-02)
 
 - Claude uses the desk's words when it arranges your cards: tile and untile, as in the QTR app's menus.
