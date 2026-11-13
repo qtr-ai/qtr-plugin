@@ -20,7 +20,9 @@ These need a team workspace, named with `workspace`:
 | "How did the team's week go?" | `get_team_digest`: each person's open and done tasks and hours, how each team goal moved, and what was handed to the user |
 | "What's on Priya's plate?", "What did Priya give me?" | `get_tasks` with `member` (name, username, email or "me"), and optionally `period` and `assignedBy` |
 | "Everyone's load this week" | `get_team_tasks` |
-| "Give this to Kim" | `update_task` with `assignee`. `"nobody"` unassigns |
+| "Give this to Kim" | `update_task` with `assignee`, which replaces whoever has it. `"nobody"` unassigns everyone |
+| "Give this to Kim and Ravi" | `create_task` or `update_task` with `assignees`: everyone the task is for |
+| "Add Ravi to this", "Take Kim off this" | `update_task` with `addAssignees` or `removeAssignees`; the others stay on it. `bulk_update_tasks` takes both for several tasks |
 
 ## Sharing lists, goals and desks
 

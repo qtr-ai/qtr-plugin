@@ -2,6 +2,10 @@
 
 The QTR connector reads the newest entry and shows it to people on an older version of the skill, so write each entry for them: what they can do now, in a line or two.
 
+## 1.1.4 (2026-11-13)
+
+- Give a task to several people at once, or add and take people off it, by asking Claude: "give this to Kim and Ravi", "add Sam to it".
+
 ## 1.1.3 (2026-11-12)
 
 - Ask Claude for a note on a day, a week, a quarter or a year and it lands on that card on your desk; Claude can also link a notebook note to a task.
