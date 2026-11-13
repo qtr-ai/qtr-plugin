@@ -42,7 +42,7 @@ The commitment matters more than the clock:
 - **Placement:**
   - `listId`, `projectId` and `goalId` place the task.
   - `goalId` links the task to a goal but doesn't put it on the goal's map; use `add_tasks_to_checkpoint` for that.
-  - In a team workspace, or on a shared list or goal, `assignee` gives the task to someone, and they're told (rule 1).
+  - In a team workspace, or on a shared list or goal, `assignee` gives the task to someone, and `assignees` to several people. Each one is told (rule 1).
 - **Time clashes:** a `dueDate` that clashes returns free slots. Use `forceSchedule: true` only if the user accepts the overlap.
 
 Afterwards, tell the user where the task went using the result's `placedIn`.
