@@ -13,7 +13,7 @@ compatibility: >-
   Needs the QTR MCP connector (https://api.qtr.ai/mcp/sse) and a QTR account, Free or Pro. A few REST
   routes work with the same sign-in.
 metadata:
-  version: "1.1.3"
+  version: "1.1.4"
 ---
 
 # QTR
@@ -24,7 +24,7 @@ If the QTR tools aren't available, help the user connect first. The steps are in
 
 ## Keeping this skill current
 
-This is version 1.1.3 of the QTR skill. The first time you use the QTR connector in a conversation, call `get_skill_version` with `version: "1.1.3"`.
+This is version 1.1.4 of the QTR skill. The first time you use the QTR connector in a conversation, call `get_skill_version` with `version: "1.1.4"`.
 
 If `upToDate` is `false`, tell the user once, before your answer: "We've made changes to the QTR skill. Please update it." Add what changed, from `changes`, and the line from `howToUpdate` for the app you're in: `claudeApps` on claude.ai, Claude Desktop or Cowork, `claudeCode` in Claude Code, `otherAgents` anywhere else. Then carry on with the request, and don't bring it up again in that conversation. Any other answer, or no answer, needs no mention.
 

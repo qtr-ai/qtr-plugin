@@ -42,10 +42,10 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `create_task` | W | `title`*, `description`, `periodType`, `periodDate`, `period`, `dueDate`, `endDateTime`, `duration`, `priority`, `isUrgent`, `isTopPriority`, `listId`, `projectId`, `goalId`, `parentTaskId`, `recurrenceRule`, `recurrenceStartDate`, `recurrenceEndDate`, `recurrenceTimezone`, `forceSchedule`, `calendarId`, `assignee`, `workspace` | Create a new task. |
+| `create_task` | W | `title`*, `description`, `periodType`, `periodDate`, `period`, `dueDate`, `endDateTime`, `duration`, `priority`, `isUrgent`, `isTopPriority`, `listId`, `projectId`, `goalId`, `parentTaskId`, `recurrenceRule`, `recurrenceStartDate`, `recurrenceEndDate`, `recurrenceTimezone`, `forceSchedule`, `calendarId`, `assignee`, `assignees`, `workspace` | Create a new task. |
 | `create_tasks` | W | `tasks`*, `workspace` | Create several tasks in one call, from 1 to 50, each set up as create_task would. |
 | `create_recurring_task` | W | `title`, `frequency`, `daysOfWeek`, `interval`, `startDate`, `endDate`, `time`, `goalId`, `listId`, `projectId`, `timezone`, `workspace` | Create a recurring task interactively. |
-| `update_task` | D | `id`*, `title`, `description`, `dueDate`, `endDateTime`, `duration`, `priority`, `isUrgent`, `isTopPriority`, `isHighlighted`, `status`, `periodType`, `periodDate`, `period`, `listId`, `projectId`, `assignee`, `removeFromList`, `removeFromProject`, `removeFromGoal`, `removeRecurrence`, `recurrenceRule`, `recurrenceEndDate`, `recurrenceTimezone`, `updateAllOccurrences`, `forceSchedule` | Update a task's properties. |
+| `update_task` | D | `id`*, `title`, `description`, `dueDate`, `endDateTime`, `duration`, `priority`, `isUrgent`, `isTopPriority`, `isHighlighted`, `status`, `periodType`, `periodDate`, `period`, `listId`, `projectId`, `assignee`, `assignees`, `addAssignees`, `removeAssignees`, `removeFromList`, `removeFromProject`, `removeFromGoal`, `removeRecurrence`, `recurrenceRule`, `recurrenceEndDate`, `recurrenceTimezone`, `updateAllOccurrences`, `forceSchedule` | Update a task's properties. |
 | `complete_task` | D | `id`* | Mark a task as complete (done) |
 | `delete_task` | D | `id`*, `scope` | Delete a task. |
 | `restore_task` | D | `id`, `title`, `workspace` | Bring back a task the user deleted ("bring it back", "undo the delete", "restore the task I deleted"). |
