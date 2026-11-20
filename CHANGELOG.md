@@ -2,6 +2,10 @@
 
 The QTR connector reads the newest entry and shows it to people on an older version of the skill, so write each entry for them: what they can do now, in a line or two.
 
+## 1.1.5 (2026-11-21)
+
+- Claude knows your everyday routines, like the gym or lunch, and won't treat them as meetings. Ask it to make something a routine, turn one back into a task, or change its icon: "make my gym a routine", "use a bike icon for cycling".
+
 ## 1.1.4 (2026-11-13)
 
 - Give a task to several people at once, or add and take people off it, by asking Claude: "give this to Kim and Ravi", "add Sam to it".

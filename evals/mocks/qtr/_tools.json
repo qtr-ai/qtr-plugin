@@ -9,6 +9,10 @@
      "period": {
       "type": "string",
       "description": "today, this week, next week, this month, this quarter and so on. Defaults to this week."
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     }
    },
@@ -21,7 +25,7 @@
   },
   {
    "name": "get_tasks",
-   "description": "Get the user's tasks. when picks the time: \"today\", \"tomorrow\", a weekday or \"next friday\", a YYYY-MM-DD date, \"this week\", \"this month\", \"this quarter\", \"this year\", \"inbox\" or \"overdue\"; it is resolved in the user's timezone server-side, so pass the phrase as the user said it. in reads one project, list or goal instead. member reads a teammate's tasks in a team workspace. quadrant reads the important and urgent marks across every period.",
+   "description": "Get the user's tasks. when picks the time: \"today\", \"tomorrow\", a weekday or \"next friday\", a YYYY-MM-DD date, \"this week\", \"this month\", \"this quarter\", \"this year\", \"inbox\" or \"overdue\"; it is resolved in the user's timezone server-side, so pass the phrase as the user said it. in reads one project, list or goal instead. member reads a teammate's tasks in a team workspace. quadrant reads the important and urgent marks across every period. The result is { total, returned, truncated, nextCursor, summary, items }. total and summary count every item, so quote them for counts; items holds one page. When truncated is true, call again with cursor set to nextCursor for the next page. For one item's full detail, call fetch with its id.",
    "inputSchema": {
     "type": "object",
     "properties": {
@@ -65,6 +69,14 @@
        "neither"
       ],
       "description": "Read open tasks by their important and urgent marks"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
+     },
+     "cursor": {
+      "type": "string",
+      "description": "The nextCursor from an earlier page of this list. Leave it out for the first page."
      }
     }
    },
@@ -73,12 +85,6 @@
     "title": "Get tasks",
     "readOnlyHint": true,
     "destructiveHint": false
-   },
-   "_meta": {
-    "ui": {
-     "resourceUri": "ui://qtr/tasks.html"
-    },
-    "ui/resourceUri": "ui://qtr/tasks.html"
    }
   },
   {
@@ -112,6 +118,10 @@
      "question": {
       "type": "string",
       "description": "The user's question"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -130,7 +140,12 @@
    "description": "Recommend what the user should focus on now/next, reasoning over today's tasks, overdue items, goals, and working hours. Returns a finished ordered recommendation, or the overdue, today and at-risk items to write one from. Use for \"what should I do?\", \"help me plan today\", \"what's most important?\".",
    "inputSchema": {
     "type": "object",
-    "properties": {}
+    "properties": {
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
+     }
+    }
    },
    "title": "Prioritize work",
    "annotations": {
@@ -157,6 +172,10 @@
      "query": {
       "type": "string",
       "description": "For goal/project scope: the name or topic to summarize."
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     }
    },
@@ -199,7 +218,7 @@
   },
   {
    "name": "create_task",
-   "description": "Create a new task.\nState the commitment the user actually made with periodType + periodDate — resolve their phrase to a real date yourself, do not hand the phrase over unresolved.\n\"this week\" is a week commitment, \"monday\" is a day commitment, and neither is a clock time you invent for them.\nOnly pass dueDate when the user names a time of day. With none of these, the task lands in today.\nThe result's placedIn says where the task went: Inbox, Today, Tomorrow, This week, or a date. Tell the user that place in those words. Only say inbox when placedIn is Inbox; a task in Today is not in the inbox.\ngoalId links the task to a goal but does not put it on the goal's map. For tasks under one of a goal's checkpoints, use add_tasks_to_checkpoint instead.\nIf dueDate is provided and conflicts with an existing task, returns conflict info + free slot suggestions.\nRe-call with forceSchedule=true once the user confirms they want to schedule anyway.",
+   "description": "Create a new task.\nState the commitment the user actually made with periodType + periodDate — resolve their phrase to a real date yourself, do not hand the phrase over unresolved.\n\"this week\" is a week commitment, \"monday\" is a day commitment, and neither is a clock time you invent for them.\nOnly pass dueDate when the user names a time of day. With none of these, the task lands in today.\nThe result's placedIn says where the task went: Inbox, Today, Tomorrow, This week, or a date. Tell the user that place in those words. Only say inbox when placedIn is Inbox; a task in Today is not in the inbox.\ngoalId links the task to a goal but does not put it on the goal's map. For tasks under one of a goal's checkpoints, use add_tasks_to_checkpoint instead.\nIf dueDate is provided and conflicts with an existing task, returns conflict info + free slot suggestions.\nRe-call with forceSchedule=true once the user confirms they want to schedule anyway.\nEveryday activities like the gym, lunch or a walk become routines on their own; the result's kind says whether it became a task, an event or a routine.",
    "inputSchema": {
     "type": "object",
     "properties": {
@@ -291,13 +310,37 @@
       "type": "boolean",
       "description": "Set true to create at a conflicting time after user explicitly confirms overlap."
      },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "task",
+       "event",
+       "routine"
+      ],
+      "description": "What it is. task: something to get done, with a checkbox. event: it happens at a set time, like a meeting. routine: an everyday activity like the gym, lunch, a walk or a shower; it shows an icon instead of a checkbox and never goes overdue. QTR already makes titles like \"Gym\" or \"Lunch\" routines on its own, so set this only when the user says what it is (\"make my gym a routine\", \"that is not a routine, it is a task\", \"it is a meeting\"). QTR remembers the choice for that title. Not create_routine, which schedules something Ansel does."
+     },
+     "icon": {
+      "type": "string",
+      "description": "A routine's icon: an emoji, or a Lucide line-icon name such as Dumbbell, Bike, BookOpen, Coffee or Music. Setting it makes the item a routine. Leave it out and QTR picks one from the title."
+     },
      "calendarId": {
       "type": "string",
       "description": "Which connected calendar the new event goes on, by its id from list_calendars, when the user names one (\"put it on my work calendar\"). Only with dueDate. Leave it out and a timed task goes on the default calendar for new tasks, if the user set one. The result names the calendar."
      },
      "assignee": {
       "type": "string",
-      "description": "In a team workspace, or on a list or goal shared with others, who the task is for: a member's name, first name or email, or \"me\" for the user. They are told. Leave it out and the task is the user's own, unassigned. The result's assignedTo names who has it."
+      "description": "In a team workspace, or on a list or goal shared with others, who the task is for when it is one person: a member's name, first name or email, or \"me\" for the user. They are told. Leave it out and the task is the user's own, unassigned. The result's assignedTo names who has it."
+     },
+     "assignees": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Everyone the task is for when it is several people (\"give it to Kim and Ravi\"): names, first names or emails, \"me\" for the user. Each is told. Use this instead of assignee for more than one person."
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -313,7 +356,7 @@
   },
   {
    "name": "update_task",
-   "description": "Update a task's properties.\nCross-questions this tool handles automatically:\n- Recurring task: if updateAllOccurrences not set, asks \"this occurrence or all?\"\n- Repeat: recurrenceRule makes a one-off task repeat or changes how it repeats; recurrenceEndDate and recurrenceTimezone change when it stops and the zone it follows. On a recurring task this asks \"this occurrence or all?\" too, and a repeat always changes for the whole series, so only \"all\" (updateAllOccurrences: true) can change it\n- Status rescheduled: if no period set, asks which period to move to\n- Time conflict: if dueDate overlaps another task, returns conflict info + free slot suggestions; re-call with forceSchedule=true if user says schedule anyway\n- Period move (no dueDate): clears any existing scheduled time so the task lands in the plain Today column, not pinned to a time slot\nRe-call with the missing field once you have the user's answer.",
+   "description": "Update a task's properties.\nCross-questions this tool handles automatically:\n- Recurring task: if updateAllOccurrences not set, asks \"this occurrence or all?\"\n- Repeat: recurrenceRule makes a one-off task repeat or changes how it repeats; recurrenceEndDate and recurrenceTimezone change when it stops and the zone it follows. On a recurring task this asks \"this occurrence or all?\" too, and a repeat always changes for the whole series, so only \"all\" (updateAllOccurrences: true) can change it\n- Status rescheduled: if no period set, asks which period to move to\n- Time conflict: if dueDate overlaps another task, returns conflict info + free slot suggestions; re-call with forceSchedule=true if user says schedule anyway\n- Period move (no dueDate): clears any existing scheduled time so the task lands in the plain Today column, not pinned to a time slot\n- kind / icon: turn it into a task, an event or a routine, or change a routine's icon\nRe-call with the missing field once you have the user's answer.",
    "inputSchema": {
     "type": "object",
     "properties": {
@@ -394,7 +437,28 @@
      },
      "assignee": {
       "type": "string",
-      "description": "Give the task to a member of this team workspace, or to someone its shared list or goal is shared with: their name, first name or email, \"me\" for the user, or \"nobody\" to unassign it. They are told. The result's assignedTo names who has it."
+      "description": "Give the task to one member of this team workspace, or to someone its shared list or goal is shared with, replacing whoever has it: their name, first name or email, \"me\" for the user, or \"nobody\" to unassign everyone. They are told. The result's assignedTo names who has it."
+     },
+     "assignees": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Set everyone the task is for, replacing the current people (\"it is for Kim and Ravi\"). An empty list unassigns everyone."
+     },
+     "addAssignees": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Add people to the task and keep whoever already has it (\"add Kim to this\"). Each new person is told."
+     },
+     "removeAssignees": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "description": "Take people off the task and keep the others (\"take Ravi off this\")."
      },
      "removeFromList": {
       "type": "boolean",
@@ -431,6 +495,19 @@
      "forceSchedule": {
       "type": "boolean",
       "description": "Set to true to schedule at a conflicting time anyway, after the user explicitly confirms they want to overlap."
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "task",
+       "event",
+       "routine"
+      ],
+      "description": "What it is. task: something to get done, with a checkbox. event: it happens at a set time, like a meeting. routine: an everyday activity like the gym, lunch, a walk or a shower; it shows an icon instead of a checkbox and never goes overdue. QTR already makes titles like \"Gym\" or \"Lunch\" routines on its own, so set this only when the user says what it is (\"make my gym a routine\", \"that is not a routine, it is a task\", \"it is a meeting\"). QTR remembers the choice for that title. Not create_routine, which schedules something Ansel does."
+     },
+     "icon": {
+      "type": "string",
+      "description": "A routine's icon: an emoji, or a Lucide line-icon name such as Dumbbell, Bike, BookOpen, Coffee or Music. Setting it makes the item a routine. Leave it out and QTR picks one from the title."
      }
     },
     "required": [
@@ -686,10 +763,19 @@
   },
   {
    "name": "get_goals",
-   "description": "Get the user's active goals",
+   "description": "Get the user's active goals. The result is { total, returned, truncated, nextCursor, summary, items }. total and summary count every item, so quote them for counts; items holds one page. When truncated is true, call again with cursor set to nextCursor for the next page. For one item's full detail, call fetch with its id.",
    "inputSchema": {
     "type": "object",
-    "properties": {}
+    "properties": {
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
+     },
+     "cursor": {
+      "type": "string",
+      "description": "The nextCursor from an earlier page of this list. Leave it out for the first page."
+     }
+    }
    },
    "title": "Get goals",
    "annotations": {
@@ -769,6 +855,10 @@
         "parentId"
        ]
       }
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -855,10 +945,15 @@
   },
   {
    "name": "get_notes",
-   "description": "Get the user's period notes: notes pinned to a day, week, month, quarter or year. For the notebook and jots, use search_notebook.",
+   "description": "Get the user's period notes: notes pinned to a day, week, quarter or year. For the notebook and jots, use search_notebook.",
    "inputSchema": {
     "type": "object",
-    "properties": {}
+    "properties": {
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
+     }
+    }
    },
    "title": "Get notes",
    "annotations": {
@@ -869,7 +964,7 @@
   },
   {
    "name": "create_note",
-   "description": "Pin a note to a period when the user asks for a note on one, like \"a note for this week\". For \"note this\", \"jot\" or \"write down\" with no period, use create_notebook_note or jot.",
+   "description": "Pin a note to a period when the user asks for a note on one, like \"a note for this week\". It shows on that day, week, quarter or year on the desk; a period that already has a note gets this added to the end of it. For \"note this\", \"jot\" or \"write down\" with no period, use create_notebook_note or jot.",
    "inputSchema": {
     "type": "object",
     "properties": {
@@ -885,10 +980,8 @@
       "enum": [
        "day",
        "week",
-       "month",
        "quarter",
-       "year",
-       "inbox"
+       "year"
       ],
       "description": "Which period the note belongs to. Defaults to the current day when the user names no period."
      },
@@ -899,6 +992,10 @@
      "period": {
       "type": "string",
       "description": "Fallback only: the raw phrase, when you genuinely cannot resolve it to a date. Prefer periodType + periodDate."
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -914,7 +1011,7 @@
   },
   {
    "name": "update_note",
-   "description": "Update a period note, or move it to a different period. For notebook notes, use update_notebook_note or append_to_note.",
+   "description": "Update a period note, or move it to a different period. content replaces the note text. For notebook notes, use update_notebook_note or append_to_note.",
    "inputSchema": {
     "type": "object",
     "properties": {
@@ -932,10 +1029,8 @@
       "enum": [
        "day",
        "week",
-       "month",
        "quarter",
-       "year",
-       "inbox"
+       "year"
       ],
       "description": "Which period the note belongs to. Only pass this when the user is moving the note; omit it to leave the period alone."
      },
@@ -1016,6 +1111,10 @@
        "desk"
       ],
       "description": "jot for Jot, the quick-capture pad; desk for the notebook itself. Leave it out for both."
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     }
    },
@@ -1066,7 +1165,12 @@
    "description": "The user's notebook books. A book is a saved search that gathers notes by tags and words.",
    "inputSchema": {
     "type": "object",
-    "properties": {}
+    "properties": {
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
+     }
+    }
    },
    "title": "List books",
    "annotations": {
@@ -1083,6 +1187,10 @@
     "properties": {
      "text": {
       "type": "string"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -1115,6 +1223,10 @@
      "book": {
       "type": "string",
       "description": "A notebook book by name or id; the note gets that book's tags so it shows up there"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -1226,6 +1338,10 @@
      },
      "words": {
       "type": "string"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -1578,7 +1694,12 @@
    "description": "Get the user's task lists",
    "inputSchema": {
     "type": "object",
-    "properties": {}
+    "properties": {
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
+     }
+    }
    },
    "title": "Get lists",
    "annotations": {
@@ -1601,6 +1722,10 @@
      },
      "color": {
       "type": "string"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -1676,7 +1801,12 @@
    "description": "Get the user's projects",
    "inputSchema": {
     "type": "object",
-    "properties": {}
+    "properties": {
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
+     }
+    }
    },
    "title": "Get projects",
    "annotations": {
@@ -1699,6 +1829,10 @@
      },
      "color": {
       "type": "string"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -2110,7 +2244,7 @@
   },
   {
    "name": "start_focus",
-   "description": "Start a focus session on the user's own focus timer. The Focus card on their desk shows it counting down, and it counts in their focus history and score. Defaults to 25 minutes.\nRefuses while another session is running or paused and says which one; pause_focus, resume_focus and stop_focus act on that one.\nIf the Focus card is not out on the desk, bring it out with ui_command open_card (cardId: clock).",
+   "description": "Start a focus session on the user's own focus timer. Focus on the dock shows it counting down (a chip with the time left), and it counts in their focus history and score. Defaults to 25 minutes.\nRefuses while another session is running or paused and says which one; pause_focus, resume_focus and stop_focus act on that one.\nFocus is a dock tool, not a card: never open a card for it. To show the user the Focus panel (the dial and its sound), use ui_command open_focus.",
    "inputSchema": {
     "type": "object",
     "properties": {
@@ -2247,6 +2381,10 @@
      "timezone": {
       "type": "string",
       "description": "IANA timezone e.g. Asia/Kolkata. Defaults to user profile timezone."
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     }
    },
@@ -2321,6 +2459,10 @@
         "taskId"
        ]
       }
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     }
    },
@@ -2469,7 +2611,12 @@
    "description": "Get how much QTR's background agents may do on their own in each area of the workspace the user is in (calendar, tasks, goals, integrations, notes): OFF, PROPOSE (ask first) or AUTO_SAFE (apply low-risk changes automatically).",
    "inputSchema": {
     "type": "object",
-    "properties": {}
+    "properties": {
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
+     }
+    }
    },
    "title": "Get agent lanes",
    "annotations": {
@@ -2501,6 +2648,10 @@
        "PROPOSE",
        "AUTO_SAFE"
       ]
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -2631,6 +2782,10 @@
        "inbox-to-plan",
        "integration-reconciler"
       ]
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -2675,6 +2830,10 @@
      "week": {
       "type": "string",
       "description": "this, next, last, or a date (YYYY-MM-DD) inside the week. Defaults to this week."
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     }
    },
@@ -2720,6 +2879,10 @@
      "replace": {
       "type": "boolean",
       "description": "true replaces a plan the week already has. Only when the user asked."
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     }
    },
@@ -2907,6 +3070,10 @@
      "title": {
       "type": "string",
       "description": "Words from the deleted task title, when you have no id"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     }
    },
@@ -2942,6 +3109,10 @@
      "anchorId": {
       "type": "string",
       "description": "The task to place them before or after. Required for before and after."
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -2969,6 +3140,10 @@
        "week"
       ],
       "description": "Where the overdue tasks go: \"week\" (default) is the current week, \"today\" is today in the user's time zone"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     }
    },
@@ -3048,6 +3223,10 @@
      "anchorId": {
       "type": "string",
       "description": "The goal to place them before or after. Required for before and after."
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -3858,7 +4037,7 @@
   },
   {
    "name": "list_workspaces",
-   "description": "The workspaces the user belongs to: their personal workspace and any team workspaces, with the user's role in each and which one is active (the one these tools act in).",
+   "description": "The workspaces the user belongs to: their personal workspace and any team workspaces, with the user's role in each and which one is active: tools work there unless a call names another workspace.",
    "inputSchema": {
     "type": "object",
     "properties": {}
@@ -4120,7 +4299,12 @@
    "description": "The user's saved desks in this workspace, their own and the ones shared with them: each desk's name, the user's role on it (owner, editor or viewer), who owns it, how many people it is shared with, and which desk is open now (open: true).\nUse it for \"what desks do I have?\" or \"who is on my planning desk?\", and to find a desk before share_desk.",
    "inputSchema": {
     "type": "object",
-    "properties": {}
+    "properties": {
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
+     }
+    }
    },
    "title": "List desks",
    "annotations": {
@@ -4184,6 +4368,10 @@
      "when": {
       "type": "string",
       "description": "this (default), next or last; a quarter such as Q1 2027; or any date (YYYY-MM-DD) inside the week or quarter"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -4222,6 +4410,10 @@
      "replace": {
       "type": "boolean",
       "description": "true = overwrite a plan that is already there"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -4284,7 +4476,7 @@
   },
   {
    "name": "remember",
-   "description": "Remember a fact the user tells you about themself, e.g. \"remember that my sister's birthday is 3 May\" or \"I'm vegetarian\". It is saved as the user's own pinned memory, so Ansel's learning never changes or fades it.\nkind: trait (default) for something about them, entity for a person, place or thing in their life, preference for how they like things done, focus_area for something they are working on.\nFor something to do later, create a task instead.",
+   "description": "Save something the user tells you about themself, straight away: when they ask you to remember something (\"remember that my sister's birthday is 3 May\") or plainly state a lasting fact, preference, routine or limit (\"I'm vegetarian\", \"no meetings before 10\", \"I work Monday to Thursday\"). Never ask first whether to save it. It is saved as the user's own pinned memory, so Ansel's learning never changes or fades it.\nA question, a one-off request or a passing remark is not a memory: answer it or do it instead. For something to do later, create a task instead.\nkind: trait (default) for a fact about them, entity for a person, place or thing in their life, preference for how they like things done, a routine or a limit, focus_area for something they are working on.",
    "inputSchema": {
     "type": "object",
     "properties": {
@@ -4509,7 +4701,21 @@
        },
        "assignee": {
         "type": "string",
-        "description": "Give them all to a member of this team workspace (or, in the personal workspace, someone a shared list or goal is shared with, through update_task): their name, first name or email, \"me\" for the user, or \"nobody\" to unassign them"
+        "description": "Give them all to one member of this team workspace (or, in the personal workspace, someone a shared list or goal is shared with, through update_task), replacing whoever has them: their name, first name or email, \"me\" for the user, or \"nobody\" to unassign them"
+       },
+       "addAssignees": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "description": "Add these people to each task, keeping whoever already has it: names, first names or emails, \"me\" for the user"
+       },
+       "removeAssignees": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "description": "Take these people off each task, keeping the others"
        }
       }
      }
@@ -5072,6 +5278,10 @@
        "evening"
       ],
       "description": "morning or evening; left out, it follows the time of day"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     }
    },
@@ -5091,6 +5301,10 @@
      "goalId": {
       "type": "string",
       "description": "Goal id from get_goals or search"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -5109,7 +5323,12 @@
    "description": "How the quarter is going across the user's goals: the week of the quarter, days left, a count by status, and each goal with its status, reasons, evidence and next week's focus, the ones that need attention first.\nUse it for \"how's my quarter going?\" or \"which goals are behind?\". Lead with the goals that are off track or at risk and their evidence, plainly and without judging the user.",
    "inputSchema": {
     "type": "object",
-    "properties": {}
+    "properties": {
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
+     }
+    }
    },
    "title": "Get quarter status",
    "annotations": {
@@ -5123,7 +5342,12 @@
    "description": "What is at risk right now, each with a concrete fix: overdue work, an overloaded day or week, goals that are slipping or due with nothing planned, a task moved again and again, times that end before they start, and work left behind in past days or weeks.\nUse it for \"what's slipping?\", \"am I behind?\" or \"what should I fix?\". Each fix lists what it would change (changes) and the exact tool calls (actions). A fix is only an offer: say what it would change, and run its actions, with the same tool and args, only when the user says yes.",
    "inputSchema": {
     "type": "object",
-    "properties": {}
+    "properties": {
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
+     }
+    }
    },
    "title": "Get what's at risk",
    "annotations": {
@@ -5137,7 +5361,12 @@
    "description": "The weekly review in one read: what got done and what slipped in the week under review, the goals that need a look (off track or at risk, with reasons), where the quarter stands, and the week to plan next.\nNear the end of the user's week it reviews this week and plans the next; earlier it reviews last week and plans this one.\nUse it for \"review my week\", \"how did my week go?\" or \"plan next week\". Walk through it with them: what got done, what slipped, the goals to look at, then offer to draft the plan for planWeek with save_week_plan.\ncarryOver is only an offer: run it, with the same tool and args, only when the user says yes.",
    "inputSchema": {
     "type": "object",
-    "properties": {}
+    "properties": {
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
+     }
+    }
    },
    "title": "Get week review",
    "annotations": {
@@ -5151,7 +5380,12 @@
    "description": "The team workspace's week in one read: each person's open and finished tasks this week and their timed hours (heavy when over 40), how each team goal moved (its status and reason, what was finished this week and the week before), and the open tasks teammates handed to the user.\nUse it for \"who's on what\", \"who's overloaded\", \"how did our goals move\" and \"what's been assigned to me\". It is about plans, not performance: never rank, score or judge people. Only in team workspaces.",
    "inputSchema": {
     "type": "object",
-    "properties": {}
+    "properties": {
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
+     }
+    }
    },
    "title": "Get team digest",
    "annotations": {
@@ -5233,17 +5467,11 @@
     "title": "Plan time blocks",
     "readOnlyHint": false,
     "destructiveHint": true
-   },
-   "_meta": {
-    "ui": {
-     "resourceUri": "ui://qtr/time-blocks.html"
-    },
-    "ui/resourceUri": "ui://qtr/time-blocks.html"
    }
   },
   {
    "name": "list_routines",
-   "description": "The user's Ansel routines: what each does, when it runs, whether it is on, its approval mode, and its last runs with their outcome. Also the templates a new routine can start from.",
+   "description": "The user's Ansel routines: what each does, when it runs, whether it is on, its approval mode, and its last runs with their outcome. Also the templates a new routine can start from. These are not the user's everyday routines on the desk (gym, lunch, a walk): those are items, which get_tasks marks routine: true.",
    "inputSchema": {
     "type": "object",
     "properties": {}
@@ -5257,7 +5485,7 @@
   },
   {
    "name": "create_routine",
-   "description": "Set up a routine Ansel runs on a schedule, like \"every Friday at 4, draft my weekly review\" or \"every weekday at 8, plan my day\". Start from a template (plan_my_day, plan_my_week, weekly_review, evening_wrap, notes_to_tasks, goal_check_in, clear_overdue) or give your own instruction in plain words. Each run's changes wait for the user unless mode is apply_safe. A routine runs at most 3 times a day.",
+   "description": "Set up a routine Ansel runs on a schedule, like \"every Friday at 4, draft my weekly review\" or \"every weekday at 8, plan my day\". Not for everyday activities like the gym, lunch or a walk: those are desk routines, made with create_task or update_task and kind routine. Start from a template (plan_my_day, plan_my_week, weekly_review, evening_wrap, notes_to_tasks, goal_check_in, clear_overdue) or give your own instruction in plain words. Each run's changes wait for the user unless mode is apply_safe. A routine runs at most 3 times a day.",
    "inputSchema": {
     "type": "object",
     "properties": {
@@ -5303,6 +5531,10 @@
        "apply_safe"
       ],
       "description": "propose (default): every change waits for the user; apply_safe: only risky changes wait"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     }
    },
@@ -5315,7 +5547,7 @@
   },
   {
    "name": "update_routine",
-   "description": "Change a routine: pause or resume it (enabled), its name, instruction, days, time or approval mode.",
+   "description": "Change one of Ansel's scheduled routines (not a desk routine like the gym; use update_task for those): pause or resume it (enabled), its name, instruction, days, time or approval mode.",
    "inputSchema": {
     "type": "object",
     "properties": {
@@ -5369,7 +5601,7 @@
   },
   {
    "name": "delete_routine",
-   "description": "Delete a routine. Its past runs go with it.",
+   "description": "Delete one of Ansel's scheduled routines (not a desk routine like the gym; delete_task removes those). Its past runs go with it.",
    "inputSchema": {
     "type": "object",
     "properties": {
@@ -5401,12 +5633,6 @@
     "title": "List changes waiting for approval",
     "readOnlyHint": true,
     "destructiveHint": false
-   },
-   "_meta": {
-    "ui": {
-     "resourceUri": "ui://qtr/approvals.html"
-    },
-    "ui/resourceUri": "ui://qtr/approvals.html"
    }
   },
   {
@@ -5522,7 +5748,7 @@
   },
   {
    "name": "ui_command",
-   "description": "Do something on the desk the user has open in QTR, the way they would by hand: open, focus, tuck, move, resize, snap or full-screen a card, deal or tidy the desk, flip a goal card between list and map, step a card to another day, week or quarter, switch, save or rename desks, open a task, note, share sheet or Settings section, start connecting a calendar or app (start_connect), open the upgrade page, or start the Breather, a meditation, the Gita deck or the welcome tour. Open a goal, list, notebook or connection by name: pass name instead of cardId. Data changes are not desk commands: use the task, goal and focus tools. Some commands ask the user to confirm in QTR first, and the result says so. It works only while QTR is open on the user's desk. Commands: open_card(cardId, or name (+ kind?: goal | list | book | connection) to open one by what the user calls it. cardId: a catalog id (today, week, quarter, cascade, calendar, photocal, inbox, important, urgent, matrix, notebook, jot, clock, gita, ansel, breather, meditation) or goal:<id>, list:<id>, book:<id>, int:<id>, day:<YYYY-MM-DD>); focus_card(cardId); full_screen(cardId); exit_full(); set_card_view(cardId, view: list | map); set_goal_face(cardId: quarter, goalId (null clears the face)); set_period(cardId (today | week | quarter), and day: YYYY-MM-DD, or week + year, or quarter + year); set_calendar_view(view: month | week | day, anchor?: YYYY-MM-DD. Brings the Calendar card out and switches it to that view; full_screen with cardId calendar opens it full screen); set_horizons(level: year | quarter | week | day, goalId?); open_leaf(leaf: week | quarter | schedule); set_person_filter(cardId, who: me | unassigned | everyone | a member id); open_task(taskId); select_tasks(taskIds); clear_selection(); open_assignee_picker(taskId); open_note(noteId); open_book(bookId); search_notebook_ui(query); start_breather(); start_meditation(script?); draw_gita(); open_share_sheet(cardId); open_settings(section: general | notifications | connectors | ai-provider | automation | ansel | ansel-activity | ansel-routines | ansel-memory | profile | workspaces | plan-billing | refer-earn | help-about. ansel opens the Ansel settings (how much Ansel speaks up, brief and wrap hours, muted nudges); ansel-activity opens the list of what Ansel read and changed; ansel-routines opens the routines Ansel runs on a schedule, with their runs; ansel-memory opens what Ansel remembers about the user); switch_workspace(workspaceId); start_connect(provider: asana | todoist | clickup | google | outlook); open_upgrade(); start_tour(); tuck_card(cardId); move_card(cardId, and x + y, or beside: cardId + side: left | right); resize_card(cardId, and w + h, or reset: true); snap_card(cardId); unsnap_card(cardId); snap_all(); unsnap_all(); straighten_card(cardId, straight: true | false); deal(name: today | notes); tidy(focus?: cardId); fit_everything(); infinite_canvas(on: true | false); clear_desk(); lock_desk(locked: true | false. Only unlock when the user asks.); install_pack(packId); remove_pack(packId); take_from_shelf(item: a Card shelf item id: today, week, quarter, cascade, goals, calendar, photocal, inbox, lists, connections, matrix, important, urgent, notebook, jot, notebooks, clock, breather, meditation, gita, challenges. Puts it in the Cards menu; a card also comes out on the desk); put_back_on_shelf(item: a Card shelf item id: today, week, quarter, cascade, goals, calendar, photocal, inbox, lists, connections, matrix, important, urgent, notebook, jot, notebooks, clock, breather, meditation, gita, challenges. Takes it off the Cards menu and tucks its cards away); switch_desk(deskId or a preset name); save_desk(); save_desk_as(name); rename_desk(name); rename_book(bookId, name); discard_changes(); delete_desk(deskId); leave_shared_card(cardId); sign_out().",
+   "description": "Do something on the desk the user has open in QTR, the way they would by hand: open, focus, tuck, move, resize, tile or full-screen a card, deal or tidy the desk, flip a goal card between list and map, step a card to another day, week or quarter, switch, save or rename desks, open a task, note, share sheet or Settings section, start connecting a calendar or app (start_connect), open the upgrade page, or start the Breather, a meditation, the Gita deck or the welcome tour. The desk calls snapping Tile: snap_card tiles a card, unsnap_card untiles it, snap_all and unsnap_all are Tile all and Untile all, and a card marked snapped is tiled. Say tile, untile and tiled to the user, never snap. When you go through overdue tasks with the user, also open the Overdue card (open_card overdue): it lists every open task past its date, so they can tick, move or open any one of them by hand. Open a goal, list, notebook or connection by name: pass name instead of cardId. Data changes are not desk commands: use the task, goal and focus tools. Some commands ask the user to confirm in QTR first, and the result says so. It works only while QTR is open on the user's desk. Commands: open_card(cardId, or name (+ kind?: goal | list | book | connection) to open one by what the user calls it. cardId: a catalog id (today, week, quarter, cascade, calendar, photocal, inbox, important, urgent, overdue, matrix, notebook, jot, gita, ansel) or goal:<id>, list:<id>, book:<id>, int:<id>, day:<YYYY-MM-DD>); focus_card(cardId); full_screen(cardId); exit_full(); set_card_view(cardId, view: list | map); set_goal_face(cardId: quarter, goalId (null clears the face)); set_period(cardId (today | week | quarter), and day: YYYY-MM-DD, or week + year, or quarter + year); set_calendar_view(view: month | week | day, anchor?: YYYY-MM-DD. Brings the Calendar card out and switches it to that view; full_screen with cardId calendar opens it full screen); set_horizons(level: year | quarter | week | day, goalId?); open_leaf(leaf: week | quarter | schedule); set_person_filter(cardId, who: me | unassigned | everyone | a member id); open_task(taskId); select_tasks(taskIds); clear_selection(); open_assignee_picker(taskId); open_note(noteId); open_book(bookId); search_notebook_ui(query); open_focus(); start_breather(); start_meditation(script?); draw_gita(); open_share_sheet(cardId); open_settings(section: general | notifications | connectors | ai-provider | automation | ansel | ansel-activity | ansel-routines | ansel-memory | profile | workspaces | plan-billing | usage | refer-earn | help-about. plan-billing opens Billing (plan, card, invoices, cancel); usage opens Usage (tasks, goals and AI against the limits); ansel opens the Ansel settings (how much Ansel speaks up, brief and wrap hours, muted nudges); ansel-activity opens the list of what Ansel read and changed; ansel-routines opens the routines Ansel runs on a schedule, with their runs; ansel-memory opens what Ansel remembers about the user); switch_workspace(workspaceId); start_connect(provider: asana | todoist | clickup | google | outlook); open_upgrade(); start_tour(); tuck_card(cardId); move_card(cardId, and x + y, or beside: cardId + side: left | right); resize_card(cardId, and w + h, or reset: true); snap_card(cardId); unsnap_card(cardId); snap_all(); unsnap_all(); straighten_card(cardId, straight: true | false); deal(name: today | notes); tidy(focus?: cardId); fit_everything(); infinite_canvas(on: true | false); clear_desk(); lock_desk(locked: true | false. Only unlock when the user asks.); install_pack(packId); remove_pack(packId); take_from_shelf(item: a Card shelf item id: today, week, quarter, cascade, goals, calendar, photocal, inbox, lists, connections, matrix, important, urgent, overdue, notebook, jot, notebooks, gita, challenges. Puts it in the Cards menu; a card also comes out on the desk); put_back_on_shelf(item: a Card shelf item id: today, week, quarter, cascade, goals, calendar, photocal, inbox, lists, connections, matrix, important, urgent, overdue, notebook, jot, notebooks, gita, challenges. Takes it off the Cards menu and tucks its cards away); switch_desk(deskId or a preset name); save_desk(); save_desk_as(name); rename_desk(name); rename_book(bookId, name); discard_changes(); delete_desk(deskId); leave_shared_card(cardId); sign_out().",
    "inputSchema": {
     "type": "object",
     "properties": {
@@ -5547,6 +5773,7 @@
        "open_note",
        "open_book",
        "search_notebook_ui",
+       "open_focus",
        "start_breather",
        "start_meditation",
        "draw_gita",
@@ -5625,6 +5852,10 @@
        "type": "string"
       },
       "description": "The questions those answers reply to, in the same order"
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -5776,6 +6007,10 @@
         "title"
        ]
       }
+     },
+     "workspace": {
+      "type": "string",
+      "description": "A team workspace's name or id from list_workspaces, to work there. Leave it out for the user's personal workspace."
      }
     },
     "required": [
@@ -5830,12 +6065,6 @@
     "title": "Get a goal map",
     "readOnlyHint": true,
     "destructiveHint": false
-   },
-   "_meta": {
-    "ui": {
-     "resourceUri": "ui://qtr/goal-map.html"
-    },
-    "ui/resourceUri": "ui://qtr/goal-map.html"
    }
   },
   {
