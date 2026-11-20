@@ -13,7 +13,7 @@ compatibility: >-
   Needs the QTR MCP connector (https://api.qtr.ai/mcp/sse) and a QTR account, Free or Pro. A few REST
   routes work with the same sign-in.
 metadata:
-  version: "1.1.4"
+  version: "1.1.5"
 ---
 
 # QTR
@@ -24,7 +24,7 @@ If the QTR tools aren't available, help the user connect first. The steps are in
 
 ## Keeping this skill current
 
-This is version 1.1.4 of the QTR skill. The first time you use the QTR connector in a conversation, call `get_skill_version` with `version: "1.1.4"`.
+This is version 1.1.5 of the QTR skill. The first time you use the QTR connector in a conversation, call `get_skill_version` with `version: "1.1.5"`.
 
 If `upToDate` is `false`, tell the user once, before your answer: "We've made changes to the QTR skill. Please update it." Add what changed, from `changes`, and the line from `howToUpdate` for the app you're in: `claudeApps` on claude.ai, Claude Desktop or Cowork, `claudeCode` in Claude Code, `otherAgents` anywhere else. Then carry on with the request, and don't bring it up again in that conversation. Any other answer, or no answer, needs no mention.
 
@@ -36,6 +36,7 @@ These ideas shape almost every call, so keep them in mind:
 - **Nothing moves by itself.** At midnight in the user's time zone, unfinished tasks are marked backlog and stay on their day as overdue. Moving them is a choice the user makes, and QTR offers to help.
 - **Goals have maps.** A goal has checkpoints (milestones to reach) with tasks under them. Its status (on track, at risk, off track, achieved) is judged from its own tasks.
 - **The desk.** In the app, the user works on a desk of cards: Today, Week, Quarter, Inbox, lists, goals, Calendar, Focus. Results often mention cards because that's where they show.
+- **Tasks, events and routines.** A task gets done; an event happens at a time; a routine is an everyday activity like the gym or lunch, with an icon instead of a checkbox, never done and never overdue (`routine: true` in results). These desk routines are not Ansel's routines, which are things Ansel does on a schedule (`create_routine`).
 - **Ansel's changes.** Inside QTR, risky changes wait as proposals the user approves. Routines and background agents leave theirs waiting too. You can list, approve, reject, undo and redo them.
 - **Workspaces.** Everyone has a personal workspace and may be in team workspaces. Tools work in the personal one. To read, add or plan in a team workspace, pass its name as `workspace` on that call. Switching workspace in the QTR app doesn't change this.
 
@@ -43,7 +44,7 @@ These ideas shape almost every call, so keep them in mind:
 
 In Claude, and other apps that show MCP Apps, these tools also draw an interactive view under your reply, drawn like the cards on the QTR desk:
 
-- `get_tasks`: the tasks, which the user can tick off; for a day, pills switch to another day of that week;
+- `get_tasks`: the tasks, which the user can tick off (routines and events show their mark instead); for a day, pills switch to another day of that week;
 - `plan_time_blocks`: the day with its meetings and the proposed blocks, with a button that places them;
 - `get_goal_map`: the goal's map as it looks in QTR, or as a list by checkpoint, with its progress; the user can tick tasks off;
 - `list_pending_proposals`: each waiting change, which the user can apply, dismiss, undo or redo;
@@ -95,7 +96,8 @@ A button in a view can also send you a message as the user, such as "Time-block 
 | "What's my plan this week?" / "Save this as my week plan" | `get_week_plan` / `save_week_plan` |
 | "What's waiting for my approval?" | `list_pending_proposals`, then `approve_proposal` or `reject_proposal` per change |
 | "Undo what Ansel did this morning" | `get_recent_changes`, then `undo_proposal` |
-| "Every Friday at 4, draft my weekly review" | `create_routine` (rule 1) |
+| "Make my gym a routine", "That's not a routine", "Use a bike icon for cycling" | `update_task` with `kind` or `icon` |
+| "Every Friday at 4, draft my weekly review" | `create_routine` (rule 1): Ansel's own scheduled routine, never gym or lunch |
 | "Remember my sister's birthday is 3 May" / "What do you know about me?" | `remember` / `get_memory` |
 | "Jot: call the bank", "Note this: ..." | `jot`, `create_notebook_note` |
 | "Turn these meeting notes into tasks" | `meeting_to_tasks` (rule 1) |

@@ -60,7 +60,7 @@ Changes you make through the connector are not proposals. Undo them with the mat
 
 ## Routines
 
-A routine is something Ansel does on a schedule.
+A routine is something Ansel does on a schedule. Everyday activities on the desk like the gym or lunch are also called routines, but they are items, changed with `update_task` (see Routines in [planning.md](planning.md#routines)). When the user names an activity ("my gym routine"), they mean the desk item.
 
 - **Read:** `list_routines` shows each routine, its schedule, whether it's on, its mode and its last runs, plus the templates.
 - **Create** with `create_routine` (rule 1):

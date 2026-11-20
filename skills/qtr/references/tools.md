@@ -42,10 +42,10 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 
 | Tool | | Parameters | What it does |
 |---|---|---|---|
-| `create_task` | W | `title`*, `description`, `periodType`, `periodDate`, `period`, `dueDate`, `endDateTime`, `duration`, `priority`, `isUrgent`, `isTopPriority`, `listId`, `projectId`, `goalId`, `parentTaskId`, `recurrenceRule`, `recurrenceStartDate`, `recurrenceEndDate`, `recurrenceTimezone`, `forceSchedule`, `calendarId`, `assignee`, `assignees`, `workspace` | Create a new task. |
+| `create_task` | W | `title`*, `description`, `periodType`, `periodDate`, `period`, `dueDate`, `endDateTime`, `duration`, `priority`, `isUrgent`, `isTopPriority`, `listId`, `projectId`, `goalId`, `parentTaskId`, `recurrenceRule`, `recurrenceStartDate`, `recurrenceEndDate`, `recurrenceTimezone`, `forceSchedule`, `kind`, `icon`, `calendarId`, `assignee`, `assignees`, `workspace` | Create a new task. |
 | `create_tasks` | W | `tasks`*, `workspace` | Create several tasks in one call, from 1 to 50, each set up as create_task would. |
 | `create_recurring_task` | W | `title`, `frequency`, `daysOfWeek`, `interval`, `startDate`, `endDate`, `time`, `goalId`, `listId`, `projectId`, `timezone`, `workspace` | Create a recurring task interactively. |
-| `update_task` | D | `id`*, `title`, `description`, `dueDate`, `endDateTime`, `duration`, `priority`, `isUrgent`, `isTopPriority`, `isHighlighted`, `status`, `periodType`, `periodDate`, `period`, `listId`, `projectId`, `assignee`, `assignees`, `addAssignees`, `removeAssignees`, `removeFromList`, `removeFromProject`, `removeFromGoal`, `removeRecurrence`, `recurrenceRule`, `recurrenceEndDate`, `recurrenceTimezone`, `updateAllOccurrences`, `forceSchedule` | Update a task's properties. |
+| `update_task` | D | `id`*, `title`, `description`, `dueDate`, `endDateTime`, `duration`, `priority`, `isUrgent`, `isTopPriority`, `isHighlighted`, `status`, `periodType`, `periodDate`, `period`, `listId`, `projectId`, `assignee`, `assignees`, `addAssignees`, `removeAssignees`, `removeFromList`, `removeFromProject`, `removeFromGoal`, `removeRecurrence`, `recurrenceRule`, `recurrenceEndDate`, `recurrenceTimezone`, `updateAllOccurrences`, `forceSchedule`, `kind`, `icon` | Update a task's properties. |
 | `complete_task` | D | `id`* | Mark a task as complete (done) |
 | `delete_task` | D | `id`*, `scope` | Delete a task. |
 | `restore_task` | D | `id`, `title`, `workspace` | Bring back a task the user deleted ("bring it back", "undo the delete", "restore the task I deleted"). |
@@ -123,8 +123,8 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 |---|---|---|---|
 | `list_routines` | R | none | The user's Ansel routines: what each does, when it runs, whether it is on, its approval mode, and its last runs with their outcome. |
 | `create_routine` | D | `template`, `name`, `instruction`, `days`, `hour`, `minute`, `mode`, `workspace` | Set up a routine Ansel runs on a schedule, like "every Friday at 4, draft my weekly review" or "every weekday at 8, plan my day". |
-| `update_routine` | D | `routine`*, `enabled`, `name`, `instruction`, `days`, `hour`, `minute`, `mode` | Change a routine: pause or resume it (enabled), its name, instruction, days, time or approval mode. |
-| `delete_routine` | D | `routine`* | Delete a routine. |
+| `update_routine` | D | `routine`*, `enabled`, `name`, `instruction`, `days`, `hour`, `minute`, `mode` | Change one of Ansel's scheduled routines (not a desk routine like the gym; use update_task for those): pause or resume it (enabled), its name, instruction, days, time or approval mode. |
+| `delete_routine` | D | `routine`* | Delete one of Ansel's scheduled routines (not a desk routine like the gym; delete_task removes those). |
 | `list_nudges` | R | `status` | List the nudges (the reminders and suggestions QTR shows the user), most important and newest first, with the tasks each one is about and the choices it offers. |
 | `act_on_nudge` | D | `id`*, `choice` | Record the user's answer to a nudge: accept ("sure", "do it"), later (snoozes it for a few hours) or dismiss ("keep as is"). |
 | `dismiss_nudge` | D | `id`* | Dismiss a nudge the user does not want to see any more. |

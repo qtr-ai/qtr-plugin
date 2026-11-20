@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: adds-gym-routine-as-a-desk-item
+expected_outcome: |
+  "My gym routine" is an everyday activity on the desk, so Claude adds it with create_task for tomorrow at 7, and never sets up one of Ansel's scheduled routines with create_routine.
