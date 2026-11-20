@@ -44,7 +44,7 @@ These ideas shape almost every call, so keep them in mind:
 
 In Claude, and other apps that show MCP Apps, these tools also draw an interactive view under your reply, drawn like the cards on the QTR desk:
 
-- `get_tasks`: the tasks, which the user can tick off; for a day, pills switch to another day of that week;
+- `get_tasks`: the tasks, which the user can tick off (routines and events show their mark instead); for a day, pills switch to another day of that week;
 - `plan_time_blocks`: the day with its meetings and the proposed blocks, with a button that places them;
 - `get_goal_map`: the goal's map as it looks in QTR, or as a list by checkpoint, with its progress; the user can tick tasks off;
 - `list_pending_proposals`: each waiting change, which the user can apply, dismiss, undo or redo;
