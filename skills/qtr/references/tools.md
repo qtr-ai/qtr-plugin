@@ -14,7 +14,7 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 - [Ansel: brief, status, risks and plans](#ansel-brief-status-risks-and-plans) (10)
 - [Ansel: changes waiting for approval, undo and redo](#ansel-changes-waiting-for-approval-undo-and-redo) (6)
 - [Ansel: routines, nudges, background agents and automation](#ansel-routines-nudges-background-agents-and-automation) (12)
-- [Ansel: memory](#ansel-memory) (8)
+- [Ansel: memory](#ansel-memory) (9)
 - [The open desk](#the-open-desk) (2)
 - [Teams](#teams) (2)
 - [Notebook and meeting notes](#notebook-and-meeting-notes) (20)
@@ -141,6 +141,7 @@ Every tool the QTR connector offers, by area. Generated from the connector's own
 | `recall` | R | `query`, `from`, `to` | Look back at what the user and Ansel talked about and what Ansel remembers, with dates: day recaps (what was planned, decided and left open) and memory items, including ones that were replaced or… |
 | `get_memory` | R | `topic` | What Ansel remembers about the user, from both places it is kept: - memories: the memory graph (traits, routines, patterns, people and focus areas, learned from their activity or told by them),… |
 | `remember` | W | `fact`*, `kind`, `slot`, `until` | Save something the user tells you about themself, straight away: when they ask you to remember something ("remember that my sister's birthday is 3 May") or plainly state a lasting fact,… |
+| `import_memories` | W | `text`*, `from` | Bring in what another AI assistant knows about the user, when they paste its summary of them (for example ChatGPT's answer to "list everything you remember about me")… |
 | `correct_memory` | D | `nodeId`*, `text`* | Correct a memory that is wrong, e.g. |
 | `pin_memory` | D | `nodeId`* | Pin a memory so QTR keeps it exactly as it is and stops changing or fading it, e.g. |
 | `unpin_memory` | D | `nodeId`* | Unpin a memory so QTR may update or fade it again as it learns, e.g. |
