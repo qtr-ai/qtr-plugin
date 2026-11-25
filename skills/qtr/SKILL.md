@@ -13,7 +13,7 @@ compatibility: >-
   Needs the QTR MCP connector (https://api.qtr.ai/mcp/sse) and a QTR account, Free or Pro. A few REST
   routes work with the same sign-in.
 metadata:
-  version: "1.1.5"
+  version: "1.1.6"
 ---
 
 # QTR
@@ -24,7 +24,7 @@ If the QTR tools aren't available, help the user connect first. The steps are in
 
 ## Keeping this skill current
 
-This is version 1.1.5 of the QTR skill. The first time you use the QTR connector in a conversation, call `get_skill_version` with `version: "1.1.5"`.
+This is version 1.1.6 of the QTR skill. The first time you use the QTR connector in a conversation, call `get_skill_version` with `version: "1.1.6"`.
 
 If `upToDate` is `false`, tell the user once, before your answer: "We've made changes to the QTR skill. Please update it." Add what changed, from `changes`, and the line from `howToUpdate` for the app you're in: `claudeApps` on claude.ai, Claude Desktop or Cowork, `claudeCode` in Claude Code, `otherAgents` anywhere else. Then carry on with the request, and don't bring it up again in that conversation. Any other answer, or no answer, needs no mention.
 
@@ -99,6 +99,7 @@ A button in a view can also send you a message as the user, such as "Time-block 
 | "Make my gym a routine", "That's not a routine", "Use a bike icon for cycling" | `update_task` with `kind` or `icon` |
 | "Every Friday at 4, draft my weekly review" | `create_routine` (rule 1): Ansel's own scheduled routine, never gym or lunch |
 | "Remember my sister's birthday is 3 May" / "What do you know about me?" | `remember` / `get_memory` |
+| "Tell QTR what you know about me", or a pasted summary from ChatGPT or Gemini | `import_memories` with the text, one fact per line (rule 1) |
 | "Jot: call the bank", "Note this: ..." | `jot`, `create_notebook_note` |
 | "Turn these meeting notes into tasks" | `meeting_to_tasks` (rule 1) |
 | "Start a 25-minute focus" | `start_focus` |

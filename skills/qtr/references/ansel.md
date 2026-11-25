@@ -114,6 +114,10 @@ Ansel remembers facts and preferences about the user.
 | "That's wrong, I moved to Pune" | `correct_memory` (find the `nodeId` with `get_memory`) |
 | "Always remember I work 9 to 5" / "that can change" | `pin_memory` / `unpin_memory` |
 | "Forget where I work", "stop assuming I work mornings" | `forget_memory` / `forget_preference` (rule 1) |
+| "Tell QTR what you know about me" | Write out what you know about the user, one fact per line in their voice, show it, and once they say yes pass it to `import_memories` with `from: "claude"` |
+| A pasted summary from ChatGPT, Gemini or another assistant | `import_memories` with the text as pasted and `from` set to that assistant |
+
+`import_memories` saves what is new straight away and reports what it saved, what Ansel already knew, what differs from what Ansel has, and what it could not keep. Tell the user each part. In the QTR app, Settings → Memory → Import memory does the same with a prompt to copy.
 
 For something to do later, create a task, not a memory.
 
